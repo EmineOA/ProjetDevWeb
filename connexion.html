@@ -6,7 +6,6 @@
   <title>Connexion - École Intelligente</title>
   <link rel="stylesheet" href="css/style.css">
   <style>
-    /* Reset et styles de base */
     * {
         margin: 0;
         padding: 0;
@@ -22,36 +21,100 @@
     
     /* En-tête */
     header {
-        background-color: #2c3e50;
-        color: white;
-        padding: 1rem 2rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-    
-    .logo {
-        font-size: 1.5rem;
-        font-weight: bold;
-    }
-    
-    .auth-actions {
-        display: flex;
-        gap: 1rem;
-    }
-    
-    .auth-actions a {
-        color: white;
-        text-decoration: none;
-        padding: 0.5rem 1rem;
-        border-radius: 4px;
-        transition: background-color 0.3s;
-    }
-    
-    .auth-actions a:hover {
-        background-color: #34495e;
-    }
+            background-color: #2c3e50;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            text-decoration: none;
+            color: white;
+        }
+        
+        .logo img {
+            height: 50px; 
+            transition: transform 0.3s;
+        }
+        
+        .logo:hover img {
+            transform: scale(1.05);
+        }
+        
+        .modules {
+            display: flex;
+            gap: 2rem;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .module-btn {
+            color: white;
+            text-decoration: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            transition: all 0.3s;
+            font-weight: 600;
+            font-size: 1.1rem; 
+        }
+        
+        .module-btn:hover {
+            background-color: #34495e;
+            transform: translateY(-2px);
+        }
+        
+        .auth-container {
+            margin-left: auto; 
+        }
+        
+        .auth-btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .auth-dropdown {
+            position: absolute;
+            right: 0;
+            background-color: white;
+            min-width: 180px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            border-radius: 4px;
+            z-index: 10;
+            display: none;
+        }
+        
+        .auth-dropdown a {
+            color: #2c3e50;
+            padding: 0.8rem 1rem;
+            text-decoration: none;
+            display: block;
+            transition: background-color 0.2s;
+        }
+        
+        .auth-dropdown a:hover {
+            background-color: #f5f7fa;
+        }
+        
+        .auth-container:hover .auth-dropdown {
+            display: block;
+        }
     
     /* Contenu principal */
     main {
@@ -142,13 +205,28 @@
 </style>
 </head>
 <body>
-  <header>
-      <div class="logo">Plateforme Intelligente</div>
-      <div class="auth-actions">
-          <a href="inscription.html">S'inscrire</a>
-          <a href="connexion.html">Se connecter</a>
-      </div>
-  </header>
+    <header>
+        <a href="accueil.html" class="logo">
+            <img src="images/cy_tech.png" alt="Logo CY Tech">
+        </a>
+        
+        <nav class="modules">
+            <a href="#" class="module-btn">Visualisation</a>
+            <a href="#" class="module-btn">Gestion</a>
+            <a href="#" class="module-btn">Administration</a>
+        </nav>
+        
+        <div class="auth-container">
+            <button class="auth-btn">
+                S'authentifier
+                <span>▼</span>
+            </button>
+            <div class="auth-dropdown">
+                <a href="connexion.html">Se connecter</a>
+                <a href="inscription.html">S'inscrire</a>
+            </div>
+        </div>
+    </header>
   
   <main>
       <h1>Se connecter</h1>

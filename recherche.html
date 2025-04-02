@@ -99,10 +99,25 @@
 </head>
 <body>
     <header>
-        <div class="logo">École Intelligente</div>
-        <div class="auth-actions">
-            <a href="inscription.html">S'inscrire</a>
-            <a href="connexion.html">Se connecter</a>
+        <a href="accueil.html" class="logo">
+            <img src="images/cy_tech.png" alt="Logo CY Tech">
+        </a>
+        
+        <nav class="modules">
+            <a href="#" class="module-btn">Visualisation</a>
+            <a href="#" class="module-btn">Gestion</a>
+            <a href="#" class="module-btn">Administration</a>
+        </nav>
+        
+        <div class="auth-container">
+            <button class="auth-btn">
+                S'authentifier
+                <span>▼</span>
+            </button>
+            <div class="auth-dropdown">
+                <a href="connexion.html">Se connecter</a>
+                <a href="inscription.html">S'inscrire</a>
+            </div>
         </div>
     </header>
 

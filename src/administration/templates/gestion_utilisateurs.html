@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block title %}Gestion des Utilisateurs{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="row">
+    <!-- Sidebar de navigation -->
+    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+      <div class="position-sticky pt-3">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'tableau_de_bord' %}">
+              <span data-feather="home"></span>
+              Tableau de Bord
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="{% url 'gestion_utilisateurs' %}">
+              <span data-feather="users"></span>
+              Gestion des Utilisateurs
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'gestion_objets_avances' %}">
+              <span data-feather="layers"></span>
+              Gestion des Objets
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'securite_maintenance' %}">
+              <span data-feather="shield"></span>
+              Sécurité & Maintenance
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'personnalisation' %}">
+              <span data-feather="sliders"></span>
+              Personnalisation
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'rapports_avances' %}">
+              <span data-feather="bar-chart-2"></span>
+              Rapports Avancés
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Zone de contenu principal -->
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Liste des Utilisateurs</h1>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead class="thead-dark">
+            <tr>
+              <th>ID</th>
+              <th>Username</th>
+              <th>Nom complet</th>
+              <th>Email</th>
+              <th>Type</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for user in utilisateurs %}
+            <tr>
+              <td>{{ user.id }}</td>
+              <td>{{ user.username }}</td>
+              <td>{{ user.first_name }} {{ user.last_name }}</td>
+              <td>{{ user.email }}</td>
+              <td>{{ user.type_membre }}</td>
+              <td>
+                <a href="#" class="btn btn-sm btn-primary">Modifier</a>
+                <a href="#" class="btn btn-sm btn-danger">Supprimer</a>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="6" class="text-center">Aucun utilisateur trouvé.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+</div>
+{% endblock %}

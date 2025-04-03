@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block title %}Sécurité et Maintenance{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="row">
+    <!-- Sidebar de navigation -->
+    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+      <div class="position-sticky pt-3">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'tableau_de_bord' %}">
+              <span data-feather="home"></span>
+              Tableau de Bord
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'gestion_utilisateurs' %}">
+              <span data-feather="users"></span>
+              Gestion des Utilisateurs
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'gestion_objets_avances' %}">
+              <span data-feather="layers"></span>
+              Gestion des Objets
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="{% url 'securite_maintenance' %}">
+              <span data-feather="shield"></span>
+              Sécurité & Maintenance
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'personnalisation' %}">
+              <span data-feather="sliders"></span>
+              Personnalisation
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'rapports_avances' %}">
+              <span data-feather="bar-chart-2"></span>
+              Rapports Avancés
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Zone de contenu principal -->
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Sécurité et Maintenance</h1>
+      </div>
+      <div class="card mb-4">
+        <div class="card-body">
+          <h5 class="card-title">Mise à jour du mot de passe admin</h5>
+          <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="new_password" class="form-label">Nouveau mot de passe</label>
+              <input type="password" class="form-control" id="new_password" name="new_password">
+            </div>
+            <button type="submit" class="btn btn-primary">Mettre à jour</button>
+          </form>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Sauvegarde de la base de données</h5>
+          <p>Option pour effectuer une sauvegarde manuelle ou planifiée de la BDD.</p>
+          <a href="#" class="btn btn-secondary">Sauvegarder</a>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+{% endblock %}

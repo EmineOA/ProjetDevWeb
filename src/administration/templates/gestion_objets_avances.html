@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block title %}Gestion Avancée des Objets{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="row">
+    <!-- Sidebar de navigation -->
+    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+      <div class="position-sticky pt-3">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'tableau_de_bord' %}">
+              <span data-feather="home"></span>
+              Tableau de Bord
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'gestion_utilisateurs' %}">
+              <span data-feather="users"></span>
+              Gestion des Utilisateurs
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="{% url 'gestion_objets_avances' %}">
+              <span data-feather="layers"></span>
+              Gestion des Objets
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'securite_maintenance' %}">
+              <span data-feather="shield"></span>
+              Sécurité & Maintenance
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'personnalisation' %}">
+              <span data-feather="sliders"></span>
+              Personnalisation
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'rapports_avances' %}">
+              <span data-feather="bar-chart-2"></span>
+              Rapports Avancés
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Zone de contenu principal -->
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Gestion des Objets Connectés</h1>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+          <thead class="thead-dark">
+            <tr>
+              <th>ID</th>
+              <th>Nom</th>
+              <th>Catégorie</th>
+              <th>État</th>
+              <th>Salle</th>
+              <th>Consommation</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for objet in objets %}
+            <tr>
+              <td>{{ objet.id }}</td>
+              <td>{{ objet.nom }}</td>
+              <td>
+                {% if objet.categorie %}
+                  {{ objet.categorie.nom }}
+                {% else %}
+                  N/A
+                {% endif %}
+              </td>
+              <td>{{ objet.etat }}</td>
+              <td>
+                {% if objet.salle %}
+                  {{ objet.salle.nom }}
+                {% else %}
+                  N/A
+                {% endif %}
+              </td>
+              <td>{{ objet.consommation_energetique }} kWh</td>
+              <td>
+                <a href="#" class="btn btn-sm btn-primary">Modifier</a>
+                <a href="#" class="btn btn-sm btn-danger">Supprimer</a>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="7" class="text-center">Aucun objet trouvé.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+</div>
+{% endblock %}

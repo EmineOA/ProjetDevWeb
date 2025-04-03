@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block title %}Tableau de Bord{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="row">
+    <!-- Sidebar de navigation -->
+    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+      <div class="position-sticky pt-3">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link active" href="{% url 'tableau_de_bord' %}">
+              <span data-feather="home"></span>
+              Tableau de Bord
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'gestion_utilisateurs' %}">
+              <span data-feather="users"></span>
+              Gestion des Utilisateurs
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'gestion_objets_avances' %}">
+              <span data-feather="layers"></span>
+              Gestion des Objets
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'securite_maintenance' %}">
+              <span data-feather="shield"></span>
+              Sécurité & Maintenance
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'personnalisation' %}">
+              <span data-feather="sliders"></span>
+              Personnalisation
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'rapports_avances' %}">
+              <span data-feather="bar-chart-2"></span>
+              Rapports Avancés
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Zone de contenu principal -->
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="jumbotron mt-3">
+        <h1 class="display-4">Bienvenue sur le Tableau de Bord</h1>
+        <p class="lead">Vue d'ensemble des statistiques et actions de la plateforme.</p>
+        <hr class="my-4">
+        <p>Utilisez la navigation à gauche pour accéder aux différentes sections d'administration.</p>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="card text-white bg-primary mb-3">
+            <div class="card-body">
+              <h5 class="card-title">Utilisateurs</h5>
+              <p class="card-text">Gestion des utilisateurs et de leurs rôles.</p>
+              <a href="{% url 'gestion_utilisateurs' %}" class="btn btn-light">Voir plus</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card text-white bg-success mb-3">
+            <div class="card-body">
+              <h5 class="card-title">Objets Connectés</h5>
+              <p class="card-text">Gestion avancée des objets connectés.</p>
+              <a href="{% url 'gestion_objets_avances' %}" class="btn btn-light">Voir plus</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card text-white bg-warning mb-3">
+            <div class="card-body">
+              <h5 class="card-title">Sécurité & Maintenance</h5>
+              <p class="card-text">Paramètres de sécurité et maintenance.</p>
+              <a href="{% url 'securite_maintenance' %}" class="btn btn-light">Voir plus</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+{% endblock %}

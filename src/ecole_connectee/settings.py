@@ -65,12 +65,12 @@ ROOT_URLCONF = 'ecole_connectee.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'src', 'administration', 'templates'),
-                 os.path.join(BASE_DIR, 'src', 'gestion', 'templates'),
-                 os.path.join(BASE_DIR, 'src', 'information', 'templates'),
-                 os.path.join(BASE_DIR, 'src', 'objets', 'templates'),
-                 os.path.join(BASE_DIR, 'src', 'utilisateurs', 'templates'),
-                 os.path.join(BASE_DIR, 'src', 'visualisation', 'templates'),
+        'DIRS': [os.path.join(BASE_DIR, 'administration', 'templates'),
+                 os.path.join(BASE_DIR, 'gestion', 'templates'),
+                 os.path.join(BASE_DIR, 'information', 'templates'),
+                 os.path.join(BASE_DIR, 'objets', 'templates'),
+                 os.path.join(BASE_DIR, 'utilisateurs', 'templates'),
+                 os.path.join(BASE_DIR, 'visualisation', 'templates'),
                  ],
         'APP_DIRS': True,
         'OPTIONS': {

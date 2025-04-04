@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     'src.administration',
     'src.gestion',
     'src.information',
-    'src.visualisation'
+    'src.visualisation',
 ]
 
 
@@ -60,7 +60,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'ecole_connectee.urls'
+ROOT_URLCONF = 'src.ecole_connectee.urls'
 
 TEMPLATES = [
     {
@@ -80,12 +80,13 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'src.administration.context_processors.appearance',
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'ecole_connectee.wsgi.application'
+WSGI_APPLICATION = 'src.ecole_connectee.wsgi.application'
 
 
 # Database

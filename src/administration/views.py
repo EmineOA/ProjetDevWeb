@@ -1,7 +1,16 @@
+import subprocess
+import csv
+import io
 from django.shortcuts import render, get_object_or_404, redirect
 from src.utilisateurs.models import Utilisateur
 from src.objets.models import ObjetConnecte, Rapport
-from .forms import UserAddForm, UserUpdateForm
+from .forms import UserAddForm, UserUpdateForm, ApparenceForm
+from django.conf import settings
+from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required, user_passes_test
+from .models import Apparence
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
 
 def tableau_de_bord(request):
     context = {}
@@ -23,8 +32,16 @@ def securite_maintenance(request):
     return render(request, 'securite_maintenance.html', context)
 
 def personnalisation(request):
-    # Logique pour modifier l'apparence ou d'autres paramètres
-    context = {}
+    # Tente de récupérer l'instance d'apparence, sinon en crée une nouvelle (identifiée par id=1)
+    instance, created = Apparence.objects.get_or_create(id=1)
+    if request.method == 'POST':
+        form = ApparenceForm(request.POST, instance=instance)
+        if form.is_valid():
+            form.save()
+            return redirect('personnalisation')
+    else:
+        form = ApparenceForm(instance=instance)
+    context = {'form': form}
     return render(request, 'personnalisation.html', context)
 
 def rapports_avances(request):
@@ -72,3 +89,99 @@ def user_delete(request, user_id):
         return redirect('gestion_utilisateurs')
     return render(request, 'user_delete_confirm.html', {'user': user})
 
+
+def admin_required(user):
+    return user.is_superuser
+
+
+@login_required
+@user_passes_test(admin_required)
+def backup_db(request):
+    db_settings = settings.DATABASES['default']
+    # Utilisez le chemin complet vers mysqldump fourni par WampServer
+    mysqldump_path = r'D:\WampServer\bin\mysql\mysql9.1.0\bin\mysqldump.exe'  # Adaptez selon votre version
+    cmd = [
+        mysqldump_path,
+        '-h', db_settings.get('HOST', 'localhost'),
+        '-u', db_settings.get('USER', 'root'),
+        f"--password={db_settings.get('PASSWORD', '')}",
+        db_settings['NAME']
+    ]
+    try:
+        dump = subprocess.check_output(cmd)
+    except subprocess.CalledProcessError:
+        return HttpResponse("Erreur lors de la sauvegarde de la base de données.", status=500)
+
+    response = HttpResponse(dump, content_type='application/sql')
+    response['Content-Disposition'] = 'attachment; filename="backup.sql"'
+    return response
+
+def personnalisation(request):
+    # Tente de récupérer l'instance d'apparence, sinon en crée une nouvelle (utilisation d'un identifiant fixe, ex: 1)
+    instance, created = Apparence.objects.get_or_create(id=1)
+    if request.method == 'POST':
+        form = ApparenceForm(request.POST, instance=instance)
+        if form.is_valid():
+            form.save()
+            # Optionnel : ajouter un message de succès
+            return redirect('personnalisation')
+    else:
+        form = ApparenceForm(instance=instance)
+    context = {'form': form}
+    return render(request, 'personnalisation.html', context)
+
+
+def export_reports_csv(request):
+    # Création d'une réponse HTTP avec le type de contenu CSV
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="rapports.csv"'
+
+    writer = csv.writer(response)
+    # Écriture de l'en-tête
+    writer.writerow(['ID', 'Titre', 'Contenu', 'Date de Création', 'Type de Rapport'])
+
+    rapports = Rapport.objects.all().order_by('date_creation')
+    for rapport in rapports:
+        writer.writerow([
+            rapport.id,
+            rapport.titre,
+            rapport.contenu,
+            rapport.date_creation,
+            rapport.type_rapport
+        ])
+    return response
+
+def export_reports_pdf(request):
+    buffer = io.BytesIO()
+    p = canvas.Canvas(buffer, pagesize=letter)
+    width, height = letter
+
+    y = height - 50
+    p.setFont("Helvetica-Bold", 16)
+    p.drawString(50, y, "Rapports")
+    y -= 30
+    p.setFont("Helvetica", 12)
+
+    rapports = Rapport.objects.all().order_by('date_creation')
+    for rapport in rapports:
+        if y < 100:
+            p.showPage()
+            y = height - 50
+            p.setFont("Helvetica", 12)
+        p.drawString(50, y, f"ID: {rapport.id} - Titre: {rapport.titre}")
+        y -= 20
+        p.drawString(50, y, f"Date: {rapport.date_creation} - Type: {rapport.type_rapport}")
+        y -= 20
+        # Afficher un extrait du contenu pour éviter d'avoir trop de texte sur une seule page
+        extrait = rapport.contenu[:100] + "..." if len(rapport.contenu) > 100 else rapport.contenu
+        p.drawString(50, y, f"Contenu: {extrait}")
+        y -= 30
+
+    p.showPage()
+    p.save()
+    pdf = buffer.getvalue()
+    buffer.close()
+
+    response = HttpResponse(pdf, content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="rapports.pdf"'
+    return response

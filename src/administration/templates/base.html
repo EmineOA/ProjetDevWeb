@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <style>
     body {
-      background-color: #f8f9fa;
+      background-color: {{ appearance.theme_color|default:'#f8f9fa' }};
     }
     .navbar-nav .nav-link {
       margin: 0 15px;
@@ -36,9 +36,9 @@
   <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid">
-        <!-- Logo -->
+        <!-- Logo personnalisé -->
         <a class="navbar-brand d-flex align-items-center" href="{% url 'index' %}">
-          <img src="https://via.placeholder.com/80x30" alt="Logo">
+          <img src="{{ appearance.logo_url|default:'https://via.placeholder.com/80x30' }}" alt="Logo">
           Administration
         </a>
         <!-- Modules au centre (liens statiques) -->

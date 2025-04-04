@@ -4,7 +4,7 @@ from .views import index
 
 urlpatterns = [
     path('',index, name="index"),
-    path('admin/', include('administration.urls')),
+    path('admin/', include('src.administration.urls')),
     path('objets/', include('src.objets.urls')),
     path('accounts/', include('django.contrib.auth.urls'))
     # Ajouter les autres routes selon les modules...

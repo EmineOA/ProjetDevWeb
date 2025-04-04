@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     'src.administration',
     'src.gestion',
     'src.information',
-    'src.visualisation',
+    'src.visualisation'
 ]
 
 

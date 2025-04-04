@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Administration{% endblock %}
+
+{% block content %}
+<div class="row">
+  <!-- Sidebar spécifique à l'administration -->
+  <div class="col-md-3">
+    <!-- Tu peux réutiliser la sidebar commune ou la personnaliser ici -->
+    <ul class="list-group">
+      <li class="list-group-item"><a href="{% url 'gestion_utilisateurs' %}">Gestion des Utilisateurs</a></li>
+      <li class="list-group-item"><a href="{% url 'gestion_objets_avances' %}">Gestion des Objets Avancés</a></li>
+      <li class="list-group-item"><a href="{% url 'personnalisation' %}">Paramètres Généraux / Personnalisation</a></li>
+      <li class="list-group-item"><a href="{% url 'rapports_avances' %}">Rapports Avancés</a></li>
+    </ul>
+  </div>
+  <!-- Contenu principal -->
+  <div class="col-md-9">
+    <h2>Module Administration</h2>
+    <p>Accédez aux outils avancés pour gérer les utilisateurs et les objets connectés.</p>
+    <a href="{% url 'gestion_utilisateurs' %}" class="btn btn-primary mb-2">Gérer les Utilisateurs</a>
+    <a href="{% url 'gestion_objets_avances' %}" class="btn btn-secondary mb-2">Gérer les Objets</a>
+    <a href="{% url 'personnalisation' %}" class="btn btn-info mb-2">Paramètres Généraux</a>
+    <a href="{% url 'rapports_avances' %}" class="btn btn-warning mb-2">Voir les Rapports</a>
+  </div>
+</div>
+{% endblock %}

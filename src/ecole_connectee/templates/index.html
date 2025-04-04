@@ -1,10 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Mon site web</title>
-</head>
-<body>
-    <h1>Bonjour {{ prenom }}, bienvenue sur mon site</h1>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}Accueil - Information{% endblock %}
+
+{% block content %}
+<div class="jumbotron mt-3">
+  <h1 class="display-4">Bienvenue à l'École Intelligente</h1>
+  <p class="lead">Actualités, menus de la cantine, horaires, et plus encore.</p>
+  <hr class="my-4">
+  <p>Inscrivez-vous pour accéder à plus de fonctionnalités.</p>
+  <a class="btn btn-primary btn-lg" href="{% url 'login' %}" role="button">Se connecter / S'inscrire</a>
+</div>
+{% endblock %}

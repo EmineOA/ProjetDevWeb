@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Visualisation{% endblock %}
+
+{% block content %}
+<div class="row">
+  <!-- Sidebar spécifique à ce module si nécessaire -->
+  <div class="col-md-3">
+    <!-- Tu peux inclure ici une sidebar spécifique ou utiliser le header commun -->
+  </div>
+  <!-- Contenu principal -->
+  <div class="col-md-9">
+    <h2>Module Visualisation</h2>
+    <!-- Section Profil : pour gérer et consulter les profils -->
+    <div class="card mb-4">
+      <div class="card-body">
+        <h5 class="card-title">Votre Profil</h5>
+        <p class="card-text">Gérez votre profil et consultez celui des autres membres.</p>
+        <a href="#" class="btn btn-primary">Voir votre profil</a>
+      </div>
+    </div>
+    <!-- Section Liste des Objets Connectés -->
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Objets Connectés</h5>
+        <p class="card-text">Consultez et recherchez des objets connectés.</p>
+        <a href="{% url 'gestion_objets_avances' %}" class="btn btn-success">Voir les objets</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

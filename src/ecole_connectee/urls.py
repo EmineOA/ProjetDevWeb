@@ -4,6 +4,7 @@ from .views import index
 
 urlpatterns = [
     path('',index, name="index"),
-    path('admin/', include('administration.urls'))
+    path('admin/', include('administration.urls')),
+    path('objets/', include('src.objets.urls'))
     # Ajouter les autres routes selon les modules...
 ]

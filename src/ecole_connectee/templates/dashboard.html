@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}Accueil Utilisateur{% endblock %}
+
+{% block content %}
+<div class="jumbotron mt-3">
+  <h1 class="display-4">Bienvenue, {{ request.user.first_name }}!</h1>
+  <p class="lead">Voici votre espace personnel. Naviguez via le menu pour accéder aux modules.</p>
+  <hr class="my-4">
+  <p>Accédez à vos outils et informations personnalisées.</p>
+</div>
+{% endblock %}

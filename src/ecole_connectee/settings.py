@@ -71,6 +71,7 @@ TEMPLATES = [
                  os.path.join(BASE_DIR, 'objets', 'templates'),
                  os.path.join(BASE_DIR, 'utilisateurs', 'templates'),
                  os.path.join(BASE_DIR, 'visualisation', 'templates'),
+                 os.path.join(BASE_DIR, 'ecole_connectee', 'templates')
                  ],
         'APP_DIRS': True,
         'OPTIONS': {

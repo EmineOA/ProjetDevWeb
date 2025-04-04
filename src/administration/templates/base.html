@@ -32,7 +32,7 @@
   {% block extra_css %}{% endblock %}
 </head>
 <body>
-  <!-- Header commun avec navigation et icônes -->
+  <!-- Header commun avec navigation -->
   <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid">
@@ -41,20 +41,20 @@
           <img src="https://via.placeholder.com/80x30" alt="Logo">
           Administration
         </a>
-        <!-- Modules au centre -->
+        <!-- Modules au centre (liens statiques) -->
         <ul class="navbar-nav mx-auto">
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'visualisation_home' %}">
+            <a class="nav-link" href="#">
               <span data-feather="eye"></span> Visualisation
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'gestion_home' %}">
+            <a class="nav-link" href="#">
               <span data-feather="settings"></span> Gestion
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'administration_home' %}">
+            <a class="nav-link" href="#">
               <span data-feather="sliders"></span> Administration
             </a>
           </li>

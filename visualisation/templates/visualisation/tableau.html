@@ -1,0 +1,31 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/visualisation.css' %}">
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Données des Capteurs</title>
+</head>
+<body>
+    <h1>Tableau des données</h1>
+    <table border="1">
+        <tr>
+            <th>Capteur</th>
+            <th>Valeur</th>
+            <th>Date</th>
+        </tr>
+        {% for donnee in donnees %}
+            <tr>
+                <td>{{ donnee.capteur.nom }}</td>
+                <td>{{ donnee.valeur }}</td>
+                <td>{{ donnee.date_relevee }}</td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="3">Aucune donnée trouvée.</td>
+            </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

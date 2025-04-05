@@ -1,0 +1,20 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/visualisation.css' %}">
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Graphique</title>
+</head>
+<body>
+    <h1>Liste des Capteurs</h1>
+    <ul>
+        {% for capteur in capteurs %}
+            <li>{{ capteur.nom }} ({{ capteur.type }})</li>
+        {% empty %}
+            <li>Aucun capteur trouvé.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

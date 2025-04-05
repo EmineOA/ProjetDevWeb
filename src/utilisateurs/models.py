@@ -26,6 +26,21 @@ class Utilisateur(AbstractUser):
     def __str__(self):
         return self.username
 
+    def update_role(self):
+        """
+        Exemple de logique de mise à jour du rôle en fonction de l'XP.
+        Seuils d'exemple :
+          - Au moins 100 XP : passage de "simple" à "complexe" (niveau Avancé).
+          - Au moins 200 XP : passage de "complexe" à "administrateur" (niveau Expert).
+        """
+        if self.xp >= 200 and self.type_membre != 'administrateur':
+            self.type_membre = 'administrateur'
+            self.niveau = 'Expert'
+            self.save(update_fields=['type_membre', 'niveau'])
+        elif self.xp >= 100 and self.type_membre == 'simple':
+            self.type_membre = 'complexe'
+            self.niveau = 'Avancé'
+            self.save(update_fields=['type_membre', 'niveau'])
 
 class ActionUtilisateur(models.Model):
     utilisateur = models.ForeignKey(Utilisateur, on_delete=models.CASCADE, related_name='actions')

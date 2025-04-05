@@ -5,7 +5,7 @@
 {% block content %}
 <div class="container-fluid">
   <div class="row">
-    <!-- Sidebar commune -->
+    <!-- Sidebar commune identique aux autres pages du module administration avec icônes -->
     <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
       <div class="position-sticky pt-3">
         <ul class="nav flex-column">
@@ -62,8 +62,16 @@
           <form method="post">
             {% csrf_token %}
             <div class="mb-3">
-              <label for="new_password" class="form-label">Nouveau mot de passe</label>
-              <input type="password" class="form-control" id="new_password" name="new_password">
+              <label for="old_password" class="form-label">Ancien mot de passe</label>
+              <input type="password" class="form-control" id="old_password" name="old_password" required>
+            </div>
+            <div class="mb-3">
+              <label for="new_password1" class="form-label">Nouveau mot de passe</label>
+              <input type="password" class="form-control" id="new_password1" name="new_password1" required>
+            </div>
+            <div class="mb-3">
+              <label for="new_password2" class="form-label">Confirmer le nouveau mot de passe</label>
+              <input type="password" class="form-control" id="new_password2" name="new_password2" required>
             </div>
             <button type="submit" class="btn btn-primary">Mettre à jour</button>
           </form>
@@ -74,7 +82,7 @@
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">Sauvegarde de la base de données</h5>
-          <p>Cliquer sur le bouton ci-dessous pour télécharger une sauvegarde SQL de la base de données.</p>
+          <p>Cliquez sur le bouton ci-dessous pour télécharger une sauvegarde SQL de la base de données.</p>
           <a href="{% url 'backup_db' %}" class="btn btn-secondary">Télécharger la sauvegarde</a>
         </div>
       </div>

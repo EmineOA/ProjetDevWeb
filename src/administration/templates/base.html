@@ -8,19 +8,14 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <style>
     body {
-      background-color: {{ appearance.theme_color|default:'#f8f9fa' }};
+      background-color: #f8f9fa;
     }
     .navbar-nav .nav-link {
       margin: 0 15px;
     }
     .navbar-brand img {
-      height: 30px;
+      height: 50px;
       margin-right: 8px;
-    }
-    .user-info {
-      text-align: right;
-      margin-right: 15px;
-      font-size: 0.9rem;
     }
     .user-photo {
       width: 35px;
@@ -36,55 +31,91 @@
   <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid">
-        <!-- Logo personnalisé -->
-        <a class="navbar-brand d-flex align-items-center" href="{% url 'index' %}">
-          <img src="{{ appearance.logo_url|default:'https://via.placeholder.com/80x30' }}" alt="Logo">
-          Administration
+        <!-- Logo personnalisé défini par l'administrateur, redirige vers la page d'accueil Information -->
+        <a class="navbar-brand" href="{% url 'information_home' %}">
+          {% if appearance and appearance.logo_url %}
+            <img src="{{ appearance.logo_url }}" alt="Logo de l'école" class="img-fluid">
+          {% else %}
+            <img src="https://via.placeholder.com/150x50?text=Ecole+Intelligente" alt="Logo de l'école" class="img-fluid">
+          {% endif %}
         </a>
-        <!-- Modules au centre (liens statiques) -->
+        <!-- Navigation centrale (Modules) -->
         <ul class="navbar-nav mx-auto">
           <li class="nav-item">
-            <a class="nav-link" href="#">
-              <span data-feather="eye"></span> Visualisation
-            </a>
+            <a class="nav-link" href="{% url 'visualisation_home' %}">Visualisation</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">
-              <span data-feather="settings"></span> Gestion
-            </a>
+            <a class="nav-link" href="{% url 'gestion_home' %}">Gestion</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">
-              <span data-feather="sliders"></span> Administration
-            </a>
+            {% if request.user.is_authenticated and request.user.type_membre == "administrateur" %}
+              <a class="nav-link" href="{% url 'tableau_de_bord' %}">Administration</a>
+            {% else %}
+              <a class="nav-link disabled" href="#">Administration</a>
+            {% endif %}
           </li>
         </ul>
-        <!-- Partie droite : Photo de profil, XP et Username -->
+        <!-- Partie droite : Boutons d'authentification ou photo de profil + déconnexion -->
         <div class="d-flex align-items-center">
-          <div class="user-info mr-3">
-            [Admin] Username<br>
-            XP: 250/250
-          </div>
-          <img class="user-photo" src="https://via.placeholder.com/35" alt="Photo de profil">
+          {% if request.user.is_authenticated %}
+            {% if request.user.photo %}
+              <img class="user-photo" src="{{ request.user.photo.url }}" alt="Photo de profil">
+            {% else %}
+              <img class="user-photo" src="https://via.placeholder.com/35" alt="Photo de profil">
+            {% endif %}
+            <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
+              {% csrf_token %}
+            </form>
+            <a href="#" class="btn btn-outline-secondary ml-2" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+              Se déconnecter
+            </a>
+          {% else %}
+            <a href="{% url 'login' %}" class="btn btn-primary mr-2">Login</a>
+            <a href="{% url 'inscription' %}" class="btn btn-secondary">S'inscrire</a>
+          {% endif %}
         </div>
       </div>
     </nav>
   </header>
 
-  <!-- Zone de contenu -->
+  <!-- Bloc Toast pour afficher les messages (via Django messages) -->
+  <div aria-live="polite" aria-atomic="true" style="position: fixed; top: 20px; right: 20px; z-index: 1050;">
+    {% for message in messages %}
+      <div class="toast" data-delay="5000" style="min-width: 250px;">
+        <div class="toast-header {% if 'success' in message.tags %}bg-primary{% else %}bg-danger{% endif %} text-white">
+          <strong class="mr-auto">
+            {% if 'success' in message.tags %}
+              Succès
+            {% else %}
+              Erreur
+            {% endif %}
+          </strong>
+          <small>Maintenant</small>
+          <button type="button" class="ml-2 mb-1 close text-white" data-dismiss="toast" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="toast-body">
+          {{ message }}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <!-- Contenu principal -->
   <div class="container-fluid mt-3">
     {% block content %}{% endblock %}
   </div>
 
-  <!-- Bootstrap JS, Popper.js, et jQuery -->
+  <!-- Scripts : jQuery, Popper.js, Bootstrap JS, Feather Icons -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  <!-- Feather Icons -->
   <script src="https://unpkg.com/feather-icons"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function(){
       feather.replace();
+      $('.toast').toast('show');
     });
   </script>
   {% block extra_js %}{% endblock %}

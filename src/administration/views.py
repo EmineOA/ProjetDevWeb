@@ -1,35 +1,72 @@
-import subprocess
 import csv
 import io
-from django.shortcuts import render, get_object_or_404, redirect
-from src.utilisateurs.models import Utilisateur
-from src.objets.models import ObjetConnecte, Rapport
-from .forms import UserAddForm, UserUpdateForm, ApparenceForm
-from django.conf import settings
-from django.http import HttpResponse
-from django.contrib.auth.decorators import login_required, user_passes_test
-from .models import Apparence
+import subprocess
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
+from .forms import UserAddForm, UserUpdateForm
+from src.utilisateurs.decorators import role_required
+from django.conf import settings
+from django.http import HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth import logout
+from src.utilisateurs.models import Utilisateur
+from src.objets.models import ObjetConnecte, Rapport
+from .forms import ApparenceForm
+from .models import Apparence
 
+@login_required
+@role_required('administration')
 def tableau_de_bord(request):
     context = {}
     return render(request, 'tableau_de_bord.html', context)
 
+@login_required
+@role_required('visualisation')
 def gestion_utilisateurs(request):
     utilisateurs = Utilisateur.objects.all()
     context = {'utilisateurs': utilisateurs}
     return render(request, 'gestion_utilisateurs.html', context)
 
+@login_required
+@role_required('gestion')
 def gestion_objets_avances(request):
     objets = ObjetConnecte.objects.all()
     context = {'objets': objets}
     return render(request, 'gestion_objets_avances.html', context)
 
+def admin_required(user):
+    return user.is_superuser or (user.is_authenticated and user.type_membre == 'administrateur')
+
+@login_required
+@user_passes_test(admin_required)
 def securite_maintenance(request):
-    # Ici tu implémenteras la logique pour la mise à jour des mots de passe, sauvegardes, etc.
-    context = {}
-    return render(request, 'securite_maintenance.html', context)
+    """
+    Vue pour la mise à jour du mot de passe admin.
+    L'utilisateur doit fournir son ancien mot de passe, le nouveau et sa confirmation.
+    Une fois le mot de passe modifié, l'utilisateur est déconnecté et invité à se reconnecter.
+    """
+    if request.method == 'POST':
+        old_password = request.POST.get('old_password')
+        new_password1 = request.POST.get('new_password1')
+        new_password2 = request.POST.get('new_password2')
+
+        if not request.user.check_password(old_password):
+            messages.error(request, "L'ancien mot de passe est incorrect.")
+        elif new_password1 != new_password2:
+            messages.error(request, "Les nouveaux mots de passe ne correspondent pas.")
+        elif not new_password1:
+            messages.error(request, "Le nouveau mot de passe ne peut être vide.")
+        else:
+            request.user.set_password(new_password1)
+            request.user.save()
+            messages.success(request, "Votre mot de passe a été mis à jour. Veuillez vous reconnecter.")
+            # Déconnecte l'utilisateur
+            logout(request)
+            return redirect('login')
+
+    return render(request, 'securite_maintenance.html')
 
 def personnalisation(request):
     # Tente de récupérer l'instance d'apparence, sinon en crée une nouvelle (identifiée par id=1)
@@ -88,11 +125,6 @@ def user_delete(request, user_id):
         user.delete()
         return redirect('gestion_utilisateurs')
     return render(request, 'user_delete_confirm.html', {'user': user})
-
-
-def admin_required(user):
-    return user.is_superuser
-
 
 @login_required
 @user_passes_test(admin_required)

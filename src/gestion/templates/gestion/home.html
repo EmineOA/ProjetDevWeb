@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Gestion{% endblock %}
+
+{% block content %}
+<div class="text-center">
+  <h1 class="mb-4">GESTION</h1>
+  <div class="row justify-content-center">
+    <div class="col-md-3">
+      <a href="{% url 'gestion_objets' %}" class="text-decoration-none">
+        <div class="card mb-4">
+          <div class="card-body">
+            <img src="https://via.placeholder.com/200x120?text=Objets" alt="Gestion des objets" class="img-fluid mb-2">
+            <h5 class="card-title">Gestion des Objets Connectés</h5>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div class="col-md-3">
+      <a href="{% url 'export_data' %}" class="text-decoration-none">
+        <div class="card mb-4">
+          <div class="card-body">
+            <img src="https://via.placeholder.com/200x120?text=Export" alt="Exportation des données" class="img-fluid mb-2">
+            <h5 class="card-title">Exportation des Données</h5>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

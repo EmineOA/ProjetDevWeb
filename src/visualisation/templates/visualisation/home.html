@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Visualisation{% endblock %}
+
+{% block content %}
+<div class="text-center">
+  <h1 class="mb-4">VISUALISATION</h1>
+  <div class="row justify-content-center">
+    <div class="col-md-3">
+      <a href="{% url 'visualisation_profil' %}" class="text-decoration-none">
+        <div class="card mb-4">
+          <div class="card-body">
+            <img src="https://via.placeholder.com/200x120?text=Profil" alt="Profil" class="img-fluid mb-2">
+            <h5 class="card-title">PROFIL</h5>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div class="col-md-3">
+      <a href="{% url 'visualisation_objets' %}" class="text-decoration-none">
+        <div class="card mb-4">
+          <div class="card-body">
+            <img src="https://via.placeholder.com/200x120?text=Objets" alt="Objets Connectés" class="img-fluid mb-2">
+            <h5 class="card-title">Objets Connectés</h5>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Activation de votre compte</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap CSS CDN -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+      padding: 20px;
+    }
+    .activation-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 30px;
+      border: 1px solid #dee2e6;
+      border-radius: 5px;
+    }
+    .btn-activate {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="activation-container">
+    <h2 class="text-center text-primary">Activation de votre compte</h2>
+    <p>Bonjour {{ user.username }},</p>
+    <p>Merci de vous être inscrit sur notre site. Pour activer votre compte, veuillez cliquer sur le bouton ci-dessous :</p>
+    <div class="text-center">
+      <a href="http://{{ domain }}{% url 'activate' uidb64=uid token=token %}" class="btn btn-primary btn-activate">Activer mon compte</a>
+    </div>
+    <p class="mt-4">Si le bouton ne fonctionne pas, copiez et collez le lien suivant dans votre navigateur :</p>
+    <p><a href="http://{{ domain }}{% url 'activate' uidb64=uid token=token %}">http://{{ domain }}{% url 'activate' uidb64=uid token=token %}</a></p>
+    <p class="mt-3">Si vous n'êtes pas à l'origine de cette demande, veuillez ignorer ce message.</p>
+    <p class="text-center text-muted">Cordialement, l'équipe de l'École Intelligente.</p>
+  </div>
+</body>
+</html>

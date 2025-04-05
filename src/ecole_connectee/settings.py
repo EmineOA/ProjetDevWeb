@@ -13,11 +13,14 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 import os
 from pathlib import Path
 
+from django.conf.global_settings import LOGOUT_REDIRECT_URL
+
 AUTH_USER_MODEL = 'utilisateurs.Utilisateur'
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
@@ -30,7 +33,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
+LOGOUT_REDIRECT_URL = '/information/'
+LOGIN_REDIRECT_URL = '/information/'
 # Application definition
 
 INSTALLED_APPS = [
@@ -71,7 +75,8 @@ TEMPLATES = [
                  os.path.join(BASE_DIR, 'objets', 'templates'),
                  os.path.join(BASE_DIR, 'utilisateurs', 'templates'),
                  os.path.join(BASE_DIR, 'visualisation', 'templates'),
-                 os.path.join(BASE_DIR, 'ecole_connectee', 'templates')
+                 os.path.join(BASE_DIR, 'ecole_connectee', 'templates'),
+
                  ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -80,7 +85,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'src.administration.context_processors.appearance',
+                'src.ecole_connectee.context_processors.appearance_context',
             ],
         },
     },

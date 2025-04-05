@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <h1>{{ objet.nom }}</h1>
+    <img src="{{ objet.image.url }}" alt="Image de l’objet" style="max-width: 300px;" />
+    <ul>
+        <li><strong>Description :</strong> {{ objet.description }}</li>
+        <li><strong>Catégorie :</strong> {{ objet.categorie }}</li>
+        <li><strong>État :</strong> {{ objet.etat }}</li>
+        <li><strong>Lieu :</strong> {{ objet.lieu }}</li>
+        <li><strong>Consommation :</strong> {{ objet.consommation_energetique }}</li>
+        <li><strong>Type :</strong> {{ objet.type_connectivite }}</li>
+    </ul>
+</div>
+{% endblock %}

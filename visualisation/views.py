@@ -12,6 +12,8 @@ from .models import Apparence
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 # .models import DonneeCapteur, Capteur # Partie ajoutée
+from administration.models import Utilisateur  # modèle du module administration
+from django.db.models import Q
 
 
 def tableau_de_bord(request):
@@ -208,6 +210,32 @@ def visualisation_tableau(request):
 def visualisation_graphique(request):
     capteurs = Capteur.objects.all()
     return render(request, 'visualisation/graphique.html', {'capteurs': capteurs})
+
+
+@login_required
+def mon_profil(request):
+    utilisateur = request.user  # utilisateur connecté
+    context = {'utilisateur': utilisateur}
+    return render(request, 'visualisation/mon_profil.html', context)
+
+@login_required
+def rechercher_objet_connecte(request):
+    query = request.GET.get('q', '')
+    objets = ObjetConnecte.objects.filter(
+        Q(nom__icontains=query) |
+        Q(description__icontains=query)
+    ) if query else []
+
+    context = {
+        'objets': objets,
+        'query': query
+    }
+    return render(request, 'visualisation/rechercher_objet.html', context)
+
+def detail_objet(request, objet_id):
+    objet = get_object_or_404(ObjetConnecte, id=objet_id)
+    return render(request, 'visualisation/detail_objet.html', {'objet': objet})
+
 
 
 # Create your views here.

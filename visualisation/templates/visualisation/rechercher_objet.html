@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Rechercher un objet connecté</h1>
+    <form method="get">
+        <input type="text" name="q" placeholder="Nom de l’objet" value="{{ query }}">
+        <button type="submit">Rechercher</button>
+    </form>
+
+    <div class="results">
+        {% if objets %}
+            <ul>
+                {% for objet in objets %}
+                    <li>
+                        <h3>{{ objet.nom }}</h3>
+                        <p>{{ objet.description }}</p>
+                        <a href="{% url 'detail_objet' objet.id %}">Voir détails</a> <!-- 👈 Lien vers la fiche -->
+                    </li>
+                {% endfor %}
+            </ul>
+        {% elif query %}
+            <p>Aucun résultat pour "{{ query }}"</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+

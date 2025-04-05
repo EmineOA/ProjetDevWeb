@@ -1,0 +1,13 @@
+*.pyc
+__pycache__/
+env/
+venv/
+*.sqlite3
+*.log
+*.db
+.DS_Store
+.idea/
+*.py~
+*.pdf
+*.png
+*.jpg

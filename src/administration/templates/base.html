@@ -31,7 +31,7 @@
   <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid">
-        <!-- Logo personnalisé défini par l'administrateur, redirige vers la page d'accueil Information -->
+        <!-- Logo personnalisé défini par l'administrateur (si disponible) -->
         <a class="navbar-brand" href="{% url 'information_home' %}">
           {% if appearance and appearance.logo_url %}
             <img src="{{ appearance.logo_url }}" alt="Logo de l'école" class="img-fluid">
@@ -39,30 +39,35 @@
             <img src="https://via.placeholder.com/150x50?text=Ecole+Intelligente" alt="Logo de l'école" class="img-fluid">
           {% endif %}
         </a>
-        <!-- Navigation centrale (Modules) -->
-        <ul class="navbar-nav mx-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'visualisation_home' %}">Visualisation</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'gestion_home' %}">Gestion</a>
-          </li>
-          <li class="nav-item">
-            {% if request.user.is_authenticated and request.user.type_membre == "administrateur" %}
-              <a class="nav-link" href="{% url 'tableau_de_bord' %}">Administration</a>
-            {% else %}
-              <a class="nav-link disabled" href="#">Administration</a>
-            {% endif %}
-          </li>
-        </ul>
+        <!-- Navigation centrale : affiche les modules uniquement si l'utilisateur est connecté -->
+        {% if request.user.is_authenticated %}
+          <ul class="navbar-nav mx-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'visualisation_home' %}">Visualisation</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'gestion_home' %}">Gestion</a>
+            </li>
+            <li class="nav-item">
+              {% if request.user.type_membre == "administrateur" %}
+                <a class="nav-link" href="{% url 'tableau_de_bord' %}">Administration</a>
+              {% else %}
+                <a class="nav-link disabled" href="#">Administration</a>
+              {% endif %}
+            </li>
+          </ul>
+        {% endif %}
         <!-- Partie droite : Boutons d'authentification ou photo de profil + déconnexion -->
         <div class="d-flex align-items-center">
           {% if request.user.is_authenticated %}
-            {% if request.user.photo %}
-              <img class="user-photo" src="{{ request.user.photo.url }}" alt="Photo de profil">
-            {% else %}
-              <img class="user-photo" src="https://via.placeholder.com/35" alt="Photo de profil">
-            {% endif %}
+            <!-- L'image de profil est cliquable et redirige vers la page de profil -->
+            <a href="{% url 'profile_view' %}">
+              {% if request.user.photo %}
+                <img class="user-photo" src="{{ request.user.photo.url }}" alt="Photo de profil">
+              {% else %}
+                <img class="user-photo" src="https://via.placeholder.com/35" alt="Photo de profil">
+              {% endif %}
+            </a>
             <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
               {% csrf_token %}
             </form>

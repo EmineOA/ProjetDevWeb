@@ -1,10 +1,6 @@
-from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import get_user_model
-
-from src.utilisateurs.models import Utilisateur
-
-User = get_user_model()
+from django import forms
+from .models import Utilisateur
 
 class CustomUserCreationForm(UserCreationForm):
     pseudo = forms.CharField(
@@ -35,13 +31,6 @@ class CustomUserCreationForm(UserCreationForm):
         label="Date de naissance",
         widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'})
     )
-    type_membre = forms.CharField(
-        max_length=50,
-        required=False,
-        label="Type de membre",
-        widget=forms.TextInput(attrs={'class': 'form-control',
-                                      'placeholder': 'Ex: étudiant, agent de maintenance, membre de l\'administration'})
-    )
     photo = forms.ImageField(
         required=False,
         label="Photo de profil",
@@ -50,4 +39,21 @@ class CustomUserCreationForm(UserCreationForm):
 
     class Meta:
         model = Utilisateur
-        fields = ("pseudo", "email", "age", "sexe", "date_naissance", "type_membre", "photo", "password1", "password2")
+        fields = ("pseudo", "email", "age", "sexe", "date_naissance", "photo", "password1", "password2")
+
+class ProfileUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Utilisateur
+        # Séparez les champs publics et privés si nécessaire
+        fields = ['pseudo', 'age', 'sexe', 'date_naissance', 'photo', 'first_name', 'last_name', 'email']
+        widgets = {
+            'pseudo': forms.TextInput(attrs={'class': 'form-control'}),
+            'age': forms.NumberInput(attrs={'class': 'form-control'}),
+            'sexe': forms.Select(attrs={'class': 'form-control'}),
+            'date_naissance': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'photo': forms.ClearableFileInput(attrs={'class': 'form-control-file'}),
+        }
+

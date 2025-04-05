@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}Profil de {{ user_profile.username }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2>Profil de {{ user_profile.username }}</h2>
+  <div class="row">
+    <!-- Informations publiques -->
+    <div class="col-md-6">
+      <h4>Informations publiques</h4>
+      <p><strong>Pseudo :</strong> {{ user_profile.pseudo }}</p>
+      <p><strong>Âge :</strong> {{ user_profile.age }}</p>
+      <p><strong>Sexe/Genre :</strong> {{ user_profile.sexe }}</p>
+      <p><strong>Date de naissance :</strong> {{ user_profile.date_naissance }}</p>
+      {% if user_profile.photo %}
+        <p><strong>Photo :</strong><br><img src="{{ user_profile.photo.url }}" class="img-thumbnail" style="max-width: 200px;"></p>
+      {% endif %}
+    </div>
+    <!-- Informations privées (affichées seulement si autorisées) -->
+    {% if show_private %}
+    <div class="col-md-6">
+      <h4>Informations privées</h4>
+      <p><strong>Prénom :</strong> {{ user_profile.first_name }}</p>
+      <p><strong>Nom :</strong> {{ user_profile.last_name }}</p>
+      <p><strong>Email :</strong> {{ user_profile.email }}</p>
+    </div>
+    {% endif %}
+  </div>
+  {% if request.user == user_profile %}
+    <a href="{% url 'profile_edit' %}" class="btn btn-primary mt-3">Modifier mon profil</a>
+  {% endif %}
+</div>
+{% endblock %}

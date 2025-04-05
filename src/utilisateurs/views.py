@@ -10,9 +10,12 @@ from django.contrib import messages
 from django.db import IntegrityError
 from .forms import CustomUserCreationForm
 from django.contrib.auth import get_user_model
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from .models import Utilisateur
+from .forms import ProfileUpdateForm
 
 User = get_user_model()
-
 
 def inscription(request):
     if request.method == 'POST':
@@ -20,6 +23,7 @@ def inscription(request):
         if form.is_valid():
             try:
                 user = form.save(commit=False)
+                user.type_membre = "simple",
                 user.is_active = False  # Désactive le compte jusqu'à activation par e-mail
                 user.save()
 
@@ -63,3 +67,36 @@ def activate(request, uidb64, token):
         return HttpResponse('Votre compte a été activé avec succès. Vous pouvez maintenant vous connecter.')
     else:
         return HttpResponse('Le lien d’activation est invalide !')
+
+@login_required
+def profile_view(request, user_id=None):
+    """
+    Affiche le profil d'un utilisateur.
+    - Si un user_id est fourni et que l'utilisateur connecté est administrateur, on affiche le profil correspondant.
+    - Sinon, on affiche le profil de l'utilisateur connecté.
+    """
+    if user_id and request.user.is_superuser:
+        user_profile = get_object_or_404(Utilisateur, id=user_id)
+    else:
+        user_profile = request.user
+
+    # On affiche la partie privée uniquement si l'utilisateur consulte son propre profil ou s'il est admin
+    show_private = request.user == user_profile or request.user.is_superuser
+
+    context = {
+        'user_profile': user_profile,
+        'show_private': show_private,
+    }
+    return render(request, 'utilisateurs/profile.html', context)
+
+@login_required
+def profile_edit(request):
+    user_profile = request.user
+    if request.method == 'POST':
+        form = ProfileUpdateForm(request.POST, request.FILES, instance=user_profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profile_view')
+    else:
+        form = ProfileUpdateForm(instance=user_profile)
+    return render(request, 'utilisateurs/profile_edit.html', {'form': form})

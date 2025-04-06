@@ -19,20 +19,20 @@ from django.utils import timezone
 from django.db.models import Q
 
 @login_required
-@role_required('administration')
+@role_required('administrateur')
 def tableau_de_bord(request):
     context = {}
     return render(request, 'tableau_de_bord.html', context)
 
 @login_required
-@role_required('visualisation')
+@role_required('administrateur')
 def gestion_utilisateurs(request):
     utilisateurs = Utilisateur.objects.all()
     context = {'utilisateurs': utilisateurs}
     return render(request, 'gestion_utilisateurs.html', context)
 
 @login_required
-@role_required('gestion')
+@role_required('administrateur')
 def gestion_objets_avances(request):
     # Récupérer les paramètres de recherche
     query = request.GET.get('q', '')
@@ -61,11 +61,8 @@ def gestion_objets_avances(request):
     }
     return render(request, 'gestion_objets_avances.html', context)
 
-def admin_required(user):
-    return user.is_superuser or (user.is_authenticated and user.type_membre == 'administrateur')
-
 @login_required
-@user_passes_test(admin_required)
+@role_required('administrateur')
 def securite_maintenance(request):
     """
     Vue pour la mise à jour du mot de passe admin.
@@ -93,6 +90,8 @@ def securite_maintenance(request):
 
     return render(request, 'securite_maintenance.html')
 
+@login_required
+@role_required('administrateur')
 def personnalisation(request):
     # Tente de récupérer l'instance d'apparence, sinon en crée une nouvelle (identifiée par id=1)
     instance, created = Apparence.objects.get_or_create(id=1)
@@ -106,17 +105,23 @@ def personnalisation(request):
     context = {'form': form}
     return render(request, 'personnalisation.html', context)
 
+@login_required
+@role_required('administrateur')
 def rapports_avances(request):
     rapports = Rapport.objects.all()
     context = {'rapports': rapports}
     return render(request, 'rapports_avances.html', context)
 
+@login_required
+@role_required('administrateur')
 def gestion_utilisateurs(request):
     """Vue pour lister tous les utilisateurs et gérer l'accès au formulaire d'ajout."""
     utilisateurs = Utilisateur.objects.all()
     context = {'utilisateurs': utilisateurs}
     return render(request, 'gestion_utilisateurs.html', context)
 
+@login_required
+@role_required('administrateur')
 def user_add(request):
     """Vue pour ajouter un nouvel utilisateur."""
     if request.method == 'POST':
@@ -131,6 +136,8 @@ def user_add(request):
         form = UserAddForm()
     return render(request, 'user_add.html', {'form': form})
 
+@login_required
+@role_required('administrateur')
 def user_edit(request, user_id):
     user = get_object_or_404(Utilisateur, id=user_id)
     if request.method == 'POST':
@@ -145,6 +152,8 @@ def user_edit(request, user_id):
         form = UserUpdateForm(instance=user)
     return render(request, 'user_edit.html', {'form': form, 'user': user})
 
+@login_required
+@role_required('administrateur')
 def user_delete(request, user_id):
     """Vue pour supprimer un utilisateur."""
     user = get_object_or_404(Utilisateur, id=user_id)
@@ -154,7 +163,7 @@ def user_delete(request, user_id):
     return render(request, 'user_delete_confirm.html', {'user': user})
 
 @login_required
-@user_passes_test(admin_required)
+@role_required('administrateur')
 def backup_db(request):
     db_settings = settings.DATABASES['default']
     # Utilisez le chemin complet vers mysqldump fourni par WampServer
@@ -175,6 +184,8 @@ def backup_db(request):
     response['Content-Disposition'] = 'attachment; filename="backup.sql"'
     return response
 
+@login_required
+@role_required('administrateur')
 def personnalisation(request):
     # On récupère l'instance d'Apparence (id=1)
     apparence, created = Apparence.objects.get_or_create(id=1)
@@ -189,7 +200,8 @@ def personnalisation(request):
     return render(request, 'personnalisation.html', {'form': form})
 
 
-
+@login_required
+@role_required('administrateur')
 def export_reports_csv(request):
     # Création d'une réponse HTTP avec le type de contenu CSV
     response = HttpResponse(content_type='text/csv')
@@ -210,6 +222,8 @@ def export_reports_csv(request):
         ])
     return response
 
+@login_required
+@role_required('administrateur')
 def export_reports_pdf(request):
     buffer = io.BytesIO()
     p = canvas.Canvas(buffer, pagesize=letter)
@@ -245,6 +259,8 @@ def export_reports_pdf(request):
     response['Content-Disposition'] = 'attachment; filename="rapports.pdf"'
     return response
 
+@login_required
+@role_required('administrateur')
 def traiter_demande_suppression(request, demande_id):
     demande = get_object_or_404(DemandeSuppressionObjet, id=demande_id)
     if request.method == 'POST':
@@ -265,6 +281,8 @@ def traiter_demande_suppression(request, demande_id):
     # Pour un GET, on affiche la page de confirmation
     return render(request, 'traiter_demande_suppression.html', {'demande': demande})
 
+@login_required
+@role_required('administrateur')
 def gestion_utilisateurs(request):
     query = request.GET.get('q', '')
     type_membre = request.GET.get('type_membre', '')

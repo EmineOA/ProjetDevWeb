@@ -5,38 +5,50 @@
 {% block content %}
 <div class="container-fluid">
   <div class="row">
-    <!-- Sidebar commune -->
-    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+    <!-- Sidebar commune pour l'administration -->
+    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
       <div class="position-sticky pt-3">
         <ul class="nav flex-column">
           <li class="nav-item">
-            <a class="nav-link {% if request.resolver_match.url_name == 'tableau_de_bord' %}active{% endif %}" href="{% url 'tableau_de_bord' %}">
-              <span data-feather="home"></span> Tableau de Bord
+            <a class="nav-link {% if request.resolver_match.url_name == 'tableau_de_bord' %}active{% endif %}"
+               href="{% url 'tableau_de_bord' %}">
+              <span data-feather="home"></span>
+              Tableau de Bord
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link {% if request.resolver_match.url_name == 'gestion_utilisateurs' %}active{% endif %}" href="{% url 'gestion_utilisateurs' %}">
-              <span data-feather="users"></span> Gestion des Utilisateurs
+            <a class="nav-link {% if request.resolver_match.url_name == 'gestion_utilisateurs' %}active{% endif %}"
+               href="{% url 'gestion_utilisateurs' %}">
+              <span data-feather="users"></span>
+              Gestion des Utilisateurs
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link {% if request.resolver_match.url_name == 'gestion_objets_avances' %}active{% endif %}" href="{% url 'gestion_objets_avances' %}">
-              <span data-feather="layers"></span> Gestion des Objets
+            <a class="nav-link {% if request.resolver_match.url_name == 'gestion_objets_avances' %}active{% endif %}"
+               href="{% url 'gestion_objets_avances' %}">
+              <span data-feather="layers"></span>
+              Gestion des Objets
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link {% if request.resolver_match.url_name == 'securite_maintenance' %}active{% endif %}" href="{% url 'securite_maintenance' %}">
-              <span data-feather="shield"></span> Sécurité & Maintenance
+            <a class="nav-link {% if request.resolver_match.url_name == 'securite_maintenance' %}active{% endif %}"
+               href="{% url 'securite_maintenance' %}">
+              <span data-feather="shield"></span>
+              Sécurité & Maintenance
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link {% if request.resolver_match.url_name == 'personnalisation' %}active{% endif %}" href="{% url 'personnalisation' %}">
-              <span data-feather="sliders"></span> Personnalisation
+            <a class="nav-link {% if request.resolver_match.url_name == 'personnalisation' %}active{% endif %}"
+               href="{% url 'personnalisation' %}">
+              <span data-feather="sliders"></span>
+              Personnalisation
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link {% if request.resolver_match.url_name == 'rapports_avances' %}active{% endif %}" href="{% url 'rapports_avances' %}">
-              <span data-feather="bar-chart-2"></span> Rapports Avancés
+            <a class="nav-link {% if request.resolver_match.url_name == 'rapports_avances' %}active{% endif %}"
+               href="{% url 'rapports_avances' %}">
+              <span data-feather="bar-chart-2"></span>
+              Rapports Avancés
             </a>
           </li>
         </ul>
@@ -45,14 +57,42 @@
 
     <!-- Zone de contenu principal -->
     <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
-      <!-- En-tête avec bouton "Ajouter un objet" à gauche -->
       <div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <div>
-          <a href="{% url 'objet_add' %}" class="btn btn-primary">Ajouter un objet</a>
-        </div>
+        <h1 class="h2">Gestion des Objets Connectés</h1>
+        <!-- Bouton d'ajout d'objet -->
+        <a href="{% url 'objet_add' %}" class="btn btn-primary">Ajouter un objet</a>
       </div>
 
-      <!-- Tableau des objets -->
+      <!-- Exemple si vous souhaitez ajouter une barre de recherche -->
+      <!--
+      <form method="get" class="mb-4">
+        <div class="form-row">
+          <div class="col-md-4 mb-2">
+            <input type="text" name="q" value="{{ request.GET.q }}" class="form-control" placeholder="Rechercher un objet">
+          </div>
+          <div class="col-md-3 mb-2">
+            <select name="etat" class="form-control">
+              <option value="">Tous les états</option>
+              <option value="activé">Activé</option>
+              <option value="en veille">En veille</option>
+              <option value="hors ligne">Hors ligne</option>
+            </select>
+          </div>
+          <div class="col-md-3 mb-2">
+            <select name="categorie" class="form-control">
+              <option value="">Toutes les catégories</option>
+              {% for cat in categories %}
+                <option value="{{ cat.id }}">{{ cat.nom }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-md-2 mb-2">
+            <button type="submit" class="btn btn-primary btn-block">Rechercher</button>
+          </div>
+        </div>
+      </form>
+      -->
+
       <div class="table-responsive">
         <table class="table table-bordered table-striped">
           <thead class="thead-dark">
@@ -68,34 +108,35 @@
           </thead>
           <tbody>
             {% for objet in objets %}
-            <tr>
-              <td>{{ objet.id }}</td>
-              <td>{{ objet.nom }}</td>
-              <td>
-                {% if objet.categorie %}
-                  {{ objet.categorie.nom }}
-                {% else %}
-                  N/A
-                {% endif %}
-              </td>
-              <td>{{ objet.etat }}</td>
-              <td>
-                {% if objet.salle %}
-                  {{ objet.salle.nom }}
-                {% else %}
-                  N/A
-                {% endif %}
-              </td>
-              <td>{{ objet.consommation_energetique }} kWh</td>
-              <td>
-                <a href="{% url 'objet_edit' objet.id %}" class="btn btn-sm btn-primary">Modifier</a>
-                <a href="{% url 'objet_request_delete' objet.id %}" class="btn btn-sm btn-warning">Demander suppression</a>
-              </td>
-            </tr>
+              <tr>
+                <td>{{ objet.id }}</td>
+                <td>{{ objet.nom }}</td>
+                <td>
+                  {% if objet.categorie %}
+                    {{ objet.categorie.nom }}
+                  {% else %}
+                    N/A
+                  {% endif %}
+                </td>
+                <td>{{ objet.etat }}</td>
+                <td>
+                  {% if objet.salle %}
+                    {{ objet.salle.nom }}
+                  {% else %}
+                    N/A
+                  {% endif %}
+                </td>
+                <td>{{ objet.consommation_energetique }} kWh</td>
+                <td>
+                  <!-- Boutons pour un administrateur : Modifier ou Supprimer directement -->
+                  <a href="{% url 'objet_edit' objet.id %}" class="btn btn-sm btn-primary">Modifier</a>
+                  <a href="{% url 'objet_delete' objet.id %}" class="btn btn-sm btn-danger">Supprimer</a>
+                </td>
+              </tr>
             {% empty %}
-            <tr>
-              <td colspan="7" class="text-center">Aucun objet trouvé.</td>
-            </tr>
+              <tr>
+                <td colspan="7" class="text-center">Aucun objet trouvé.</td>
+              </tr>
             {% endfor %}
           </tbody>
         </table>

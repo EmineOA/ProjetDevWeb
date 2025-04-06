@@ -1,4 +1,3 @@
-from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
@@ -10,10 +9,12 @@ from django.contrib import messages
 from django.db import IntegrityError
 from .forms import CustomUserCreationForm
 from django.contrib.auth import get_user_model
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Utilisateur
 from .forms import ProfileUpdateForm
+from django.contrib.auth import logout
+from django.shortcuts import render, redirect
 
 User = get_user_model()
 
@@ -100,3 +101,16 @@ def profile_edit(request):
     else:
         form = ProfileUpdateForm(instance=user_profile)
     return render(request, 'utilisateurs/profile_edit.html', {'form': form})
+
+@login_required
+def logout_confirm(request):
+    if request.method == "POST":
+        if "confirm" in request.POST:
+            # Déconnecter l'utilisateur et rediriger vers le module information
+            logout(request)
+            return redirect("information_home")
+        else:
+            # Annuler : rediriger vers la page précédente ou une page par défaut
+            previous_url = request.META.get("HTTP_REFERER", "information_home")
+            return redirect(previous_url)
+    return render(request, "logout_confirm.html")

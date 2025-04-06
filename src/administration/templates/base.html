@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <style>
     body {
-      background-color: {{ apparence.background_color|default:"#f8f9fa" }};
+      background-color: #f8f9fa;
     }
     .navbar-nav .nav-link {
       margin: 0 15px;
@@ -43,8 +43,8 @@
       <div class="container-fluid">
         <!-- Logo redirigeant vers la page Information -->
         <a class="navbar-brand d-flex align-items-center" href="{% url 'information_home' %}">
-          {% if apparence.logo_url %}
-            <img src="{{ apparence.logo_url }}" alt="Logo">
+          {% if apparence.logo %}
+            <img src="{{ apparence.logo }}" alt="Logo">
           {% else %}
             <img src="https://via.placeholder.com/80x30" alt="Logo">
           {% endif %}
@@ -65,7 +65,7 @@
             <a class="nav-link" href="{% url 'tableau_de_bord' %}">Administration</a>
           </li>
         </ul>
-        <!-- Partie droite : notifications, info utilisateur et photo de profil -->
+        <!-- Partie droite : notifications, info utilisateur et boutons de connexion/inscription -->
         <div class="d-flex align-items-center">
           {% if request.user.is_authenticated and request.user.is_superuser %}
             <div class="dropdown mr-3">
@@ -93,9 +93,10 @@
             {% else %}
               <img src="https://via.placeholder.com/35" alt="Photo de profil" class="user-photo mr-2">
             {% endif %}
-            <a href="{% url 'logout' %}" class="btn btn-outline-secondary">Déconnexion</a>
+            <a href="{% url 'logout_confirm' %}" class="btn btn-outline-secondary">Déconnexion</a>
           {% else %}
-            <a href="{% url 'login' %}" class="btn btn-outline-primary">Connexion / Inscription</a>
+            <a href="{% url 'login' %}" class="btn btn-outline-primary mr-2">Connexion</a>
+            <a href="{% url 'inscription' %}" class="btn btn-outline-success">Inscription</a>
           {% endif %}
         </div>
       </div>

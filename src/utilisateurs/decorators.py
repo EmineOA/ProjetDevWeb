@@ -1,23 +1,19 @@
-from functools import wraps
-from django.shortcuts import redirect
-from django.contrib import messages
+# Exemple d'un décorateur role_required qui permet l'accès si le rôle de l'utilisateur
+# est "visualisation" ou supérieur dans la hiérarchie.
+from django.core.exceptions import PermissionDenied
 
 def role_required(required_role):
     def decorator(view_func):
-        @wraps(view_func)
         def _wrapped_view(request, *args, **kwargs):
-            if required_role == 'visualisation':
-                if not request.user.is_authenticated:
-                    messages.error(request, "Vous devez être connecté pour accéder à ce module.")
-                    return redirect('information_home')
-            elif required_role == 'gestion':
-                if not (request.user.is_authenticated and (request.user.type_membre in ['complexe', 'administrateur'] or request.user.is_superuser)):
-                    messages.error(request, "Vous n'avez pas les permissions nécessaires pour accéder au module Gestion.")
-                    return redirect('information_home')
-            elif required_role == 'administration':
-                if not (request.user.is_authenticated and (request.user.type_membre == 'administrateur' or request.user.is_superuser)):
-                    messages.error(request, "Vous n'avez pas les permissions nécessaires pour accéder au module Administration.")
-                    return redirect('information_home')
-            return view_func(request, *args, **kwargs)
+            # Supposons que vous avez une hiérarchie des rôles sous forme d'un dictionnaire
+            role_hierarchy = {
+                'visualisation': 1,
+                'complexe': 2,
+                'administrateur': 3,
+            }
+            user_role = request.user.type_membre  # ou une autre propriété définissant le rôle
+            if role_hierarchy.get(user_role, 0) >= role_hierarchy.get(required_role, 0):
+                return view_func(request, *args, **kwargs)
+            raise PermissionDenied
         return _wrapped_view
     return decorator

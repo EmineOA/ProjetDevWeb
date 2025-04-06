@@ -12,17 +12,20 @@ from django.contrib.auth import get_user_model, update_session_auth_hash
 
 User = get_user_model()
 
+@login_required
 @role_required('visualisation')
 def visualisation_home(request):
     # Page d'accueil du module visualisation
     return render(request, 'visualisation/home.html')
 
+@login_required
 @role_required('visualisation')
 def visualisation_profil(request):
     # Pour la section "Mon Profil" et la liste des autres profils
     utilisateurs = Utilisateur.objects.exclude(id=request.user.id)
     return render(request, 'visualisation/profil.html', {'utilisateurs': utilisateurs})
 
+@login_required
 @role_required('visualisation')
 def visualisation_objets(request):
     # Récupération des paramètres GET
@@ -60,10 +63,14 @@ def visualisation_objets(request):
     }
     return render(request, 'visualisation/objets_list.html', context)
 
+@login_required
+@role_required('visualisation')
 def visualisation_objet_detail(request, objet_id):
     objet = get_object_or_404(ObjetConnecte, id=objet_id)
     return render(request, 'visualisation/objet_detail.html', {'objet': objet})
 
+@login_required
+@role_required('visualisation')
 def profil_home(request):
     # Affiche la page de profil de l'utilisateur connecté
     user_profile = request.user
@@ -71,6 +78,8 @@ def profil_home(request):
         return redirect('login')
     return render(request, 'visualisation/profil.html', {'user_profile': user_profile})
 
+@login_required
+@role_required('visualisation')
 def modifier_profil(request):
     """
     Permet à l’utilisateur de modifier son profil.
@@ -94,6 +103,8 @@ def modifier_profil(request):
     # Pour l'instant, nous renvoyons simplement une page de modification (à compléter)
     return render(request, 'visualisation/modifier_profil.html', {'user': request.user})
 
+@login_required
+@role_required('visualisation')
 def visualisation_recherche_objet(request):
     query = request.GET.get('q', '')
     etat = request.GET.get('etat', '')
@@ -115,7 +126,8 @@ def visualisation_recherche_objet(request):
     }
     return render(request, 'visualisation/search_objet.html', context)
 
-
+@login_required
+@role_required('visualisation')
 def visualisation_recherche_objet(request):
     query = request.GET.get('q', '')
     etat = request.GET.get('etat', '')
@@ -137,6 +149,8 @@ def visualisation_recherche_objet(request):
     }
     return render(request, 'visualisation/search_objet.html', context)
 
+@login_required
+@role_required('visualisation')
 def edit_profil(request):
     user = request.user
     if request.method == 'POST':
@@ -149,6 +163,8 @@ def edit_profil(request):
         form = EditProfilForm(instance=user)
     return render(request, 'visualisation/edit_profil.html', {'form': form})
 
+@login_required
+@role_required('visualisation')
 def view_profil(request, user_id):
     # Affiche le profil d'un autre membre
     user_profile = get_object_or_404(Utilisateur, id=user_id)
@@ -156,6 +172,7 @@ def view_profil(request, user_id):
 
 
 @login_required
+@role_required('visualisation')
 def view_profiles(request):
     """
     Affiche la liste des profils (pour consulter les autres membres).
@@ -181,6 +198,8 @@ def view_profiles(request):
     }
     return render(request, 'visualisation/view_profiles.html', context)
 
+@login_required
+@role_required('visualisation')
 def search_profiles(request):
     query = request.GET.get('q', '')
     type_membre = request.GET.get('type_membre', '')
@@ -201,6 +220,7 @@ def search_profiles(request):
     return render(request, 'visualisation/view_profiles.html', context)
 
 @login_required
+@role_required('visualisation')
 def change_password(request):
     if request.method == 'POST':
         old_password = request.POST.get('old_password')
@@ -222,6 +242,8 @@ def change_password(request):
 
     return render(request, 'visualisation/change_password.html')
 
+@login_required
+@role_required('visualisation')
 def objets_list(request):
     # Barre de recherche avec deux filtres : état et catégorie
     query = request.GET.get('q', '')

@@ -1,5 +1,7 @@
 import csv
 import io
+
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib import messages
@@ -8,21 +10,30 @@ from reportlab.pdfgen import canvas
 
 from src.objets.models import ObjetConnecte
 from src.objets.forms import ObjetConnecteForm
+from src.utilisateurs.decorators import role_required
 
+
+@login_required
+@role_required('complexe')
 def gestion_home(request):
     """Page d'accueil du module Gestion, style similaire à celui de l'administration."""
     return render(request, 'gestion/home.html')
 
+@login_required
+@role_required('complexe')
 def objets_list(request):
     """Liste des objets connectés."""
     objets = ObjetConnecte.objects.all()
     context = {'objets': objets}
     return render(request, 'gestion/gestion_objets_connectes.html', context)
 
+@login_required
+@role_required('complexe')
 def export_data_home(request):
     return render(request, 'gestion/export_data_home.html')
 
-
+@login_required
+@role_required('complexe')
 def export_data_csv(request):
     """Exportation des objets en CSV."""
     objets = ObjetConnecte.objects.all()
@@ -41,6 +52,8 @@ def export_data_csv(request):
         ])
     return response
 
+@login_required
+@role_required('complexe')
 def export_data_pdf(request):
     """Exportation des objets en PDF."""
     buffer = io.BytesIO()
@@ -71,6 +84,8 @@ def export_data_pdf(request):
     response['Content-Disposition'] = 'attachment; filename="objets.pdf"'
     return response
 
+@login_required
+@role_required('complexe')
 def objet_add(request):
     """Ajout d’un nouvel objet."""
     if request.method == 'POST':
@@ -83,6 +98,8 @@ def objet_add(request):
         form = ObjetConnecteForm()
     return render(request, 'gestion/objet_add.html', {'form': form})
 
+@login_required
+@role_required('complexe')
 def objet_edit(request, objet_id):
     """Modification d’un objet existant."""
     objet = get_object_or_404(ObjetConnecte, id=objet_id)
@@ -96,6 +113,8 @@ def objet_edit(request, objet_id):
         form = ObjetConnecteForm(instance=objet)
     return render(request, 'objet_edit.html', {'form': form, 'objet': objet})
 
+@login_required
+@role_required('complexe')
 def objet_request_delete(request, objet_id):
     from src.objets.models import DemandeSuppressionObjet  # Assurez-vous que c'est bien importé ici
     objet = get_object_or_404(ObjetConnecte, id=objet_id)

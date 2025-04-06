@@ -11,5 +11,4 @@ urlpatterns = [
     path('information/', include('src.information.urls')),
     path('visualisation/', include('src.visualisation.urls')),
     path('gestion/', include('src.gestion.urls')),
-    # Ajouter les autres routes selon les modules...
 ]

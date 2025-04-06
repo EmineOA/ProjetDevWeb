@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Traiter la demande de suppression{% endblock %}
+
+{% block content %}
+<div class="row">
+  <!-- Zone de contenu principal -->
+  <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+    <div class="pt-3 pb-2 mb-3 border-bottom">
+      <h1 class="h2">Demande de suppression pour {{ demande.objet.nom }}</h1>
+      <p>Utilisateur : {{ demande.utilisateur.username }}</p>
+    </div>
+    <form method="post" id="traiter-form">
+      {% csrf_token %}
+      <button type="submit" name="action" value="accepter" class="btn btn-success">Accepter</button>
+      <!-- Bouton Refuser : on utilise type="button" et window.history.back() -->
+      <button type="button" class="btn btn-secondary" onclick="window.history.back()">Refuser</button>
+    </form>
+  </main>
+</div>
+{% endblock %}

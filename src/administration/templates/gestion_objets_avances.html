@@ -6,7 +6,7 @@
 <div class="container-fluid">
   <div class="row">
     <!-- Sidebar commune -->
-    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
       <div class="position-sticky pt-3">
         <ul class="nav flex-column">
           <li class="nav-item">
@@ -42,12 +42,17 @@
         </ul>
       </div>
     </nav>
+
     <!-- Zone de contenu principal -->
     <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+      <!-- En-tête avec bouton "Ajouter un objet" à gauche -->
       <div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Gestion des Objets Connectés</h1>
-        <a href="{% url 'objet_add' %}" class="btn btn-primary">Ajouter un objet</a>
+        <div>
+          <a href="{% url 'objet_add' %}" class="btn btn-primary">Ajouter un objet</a>
+        </div>
       </div>
+
+      <!-- Tableau des objets -->
       <div class="table-responsive">
         <table class="table table-bordered table-striped">
           <thead class="thead-dark">
@@ -84,7 +89,7 @@
               <td>{{ objet.consommation_energetique }} kWh</td>
               <td>
                 <a href="{% url 'objet_edit' objet.id %}" class="btn btn-sm btn-primary">Modifier</a>
-                <a href="{% url 'objet_delete' objet.id %}" class="btn btn-sm btn-danger">Supprimer</a>
+                <a href="{% url 'objet_request_delete' objet.id %}" class="btn btn-sm btn-warning">Demander suppression</a>
               </td>
             </tr>
             {% empty %}

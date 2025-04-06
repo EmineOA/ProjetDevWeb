@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Demander suppression{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="row">
+    <!-- La sidebar de Gestion est intégrée dans base_gestion.html -->
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Demander la suppression de l'objet : {{ objet.nom }}</h1>
+      </div>
+      <p>Êtes-vous sûr de vouloir demander la suppression de cet objet ?</p>
+      <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-warning">Oui, demander la suppression</button>
+        <a href="{% url 'objets_list' %}" class="btn btn-secondary">Annuler</a>
+      </form>
+    </main>
+  </div>
+</div>
+{% endblock %}

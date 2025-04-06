@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Module Gestion{% endblock %}
+{% block title %}Exportation des Données{% endblock %}
 
 {% block content %}
 <div class="container-fluid">
@@ -30,31 +30,13 @@
 
     <!-- Zone de contenu principal -->
     <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
-      <div class="jumbotron mt-3">
-        <h1 class="display-4">Bienvenue dans le module Gestion</h1>
-        <p class="lead">Gérez vos objets connectés et exportez vos données.</p>
-        <hr class="my-4">
-        <p>Sélectionnez une option dans la barre latérale pour continuer.</p>
+      <div class="pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Exportation des Données</h1>
       </div>
-      <div class="row">
-        <div class="col-md-4">
-          <div class="card text-white bg-info mb-3">
-            <div class="card-body">
-              <h5 class="card-title">Objets Connectés</h5>
-              <p class="card-text">Ajouter, modifier ou demander la suppression d'objets.</p>
-              <a href="{% url 'gestion_objets_connectes' %}" class="btn btn-light">Gérer</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card text-white bg-secondary mb-3">
-            <div class="card-body">
-              <h5 class="card-title">Exportation</h5>
-              <p class="card-text">Exporter vos données en CSV ou PDF.</p>
-              <a href="{% url 'gestion_export_home' %}" class="btn btn-light">Exporter</a>
-            </div>
-          </div>
-        </div>
+      <p>Choisissez le format d'exportation :</p>
+      <div class="mb-3">
+        <a href="{% url 'gestion_export_csv' %}" class="btn btn-success">Exporter en CSV</a>
+        <a href="{% url 'gestion_export_pdf' %}" class="btn btn-danger">Exporter en PDF</a>
       </div>
     </main>
   </div>

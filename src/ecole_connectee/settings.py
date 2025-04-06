@@ -86,6 +86,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'src.ecole_connectee.context_processors.appearance_context',
+                'src.administration.context_processors.admin_notifications',
             ],
         },
     },

@@ -12,9 +12,11 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import logout
 from src.utilisateurs.models import Utilisateur
-from src.objets.models import ObjetConnecte, Rapport
+from src.objets.models import ObjetConnecte, Rapport, DemandeSuppressionObjet
 from .forms import ApparenceForm
 from .models import Apparence
+from django.utils import timezone
+from django.db.models import Q
 
 @login_required
 @role_required('administration')
@@ -32,8 +34,31 @@ def gestion_utilisateurs(request):
 @login_required
 @role_required('gestion')
 def gestion_objets_avances(request):
+    # Récupérer les paramètres de recherche
+    query = request.GET.get('q', '')
+    etat = request.GET.get('etat', '')
+    categorie = request.GET.get('categorie', '')
+
     objets = ObjetConnecte.objects.all()
-    context = {'objets': objets}
+
+    # Appliquer le filtre de recherche par mot-clé (nom ou description)
+    if query:
+        objets = objets.filter(nom__icontains=query) | objets.filter(description__icontains=query)
+
+    # Filtrer par état si fourni
+    if etat:
+        objets = objets.filter(etat=etat)
+
+    # Filtrer par catégorie si fourni (en supposant que vous filtrez par l'ID de catégorie)
+    if categorie:
+        objets = objets.filter(categorie__id=categorie)
+
+    context = {
+        'objets': objets,
+        'query': query,
+        'etat': etat,
+        'categorie': categorie,
+    }
     return render(request, 'gestion_objets_avances.html', context)
 
 def admin_required(user):
@@ -107,16 +132,20 @@ def user_add(request):
     return render(request, 'user_add.html', {'form': form})
 
 def user_edit(request, user_id):
-    """Vue pour modifier un utilisateur existant."""
     user = get_object_or_404(Utilisateur, id=user_id)
     if request.method == 'POST':
-        form = UserUpdateForm(request.POST, instance=user)
+        form = UserUpdateForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
             form.save()
+            messages.success(request, "L'utilisateur a été mis à jour avec succès.")
             return redirect('gestion_utilisateurs')
+        else:
+            # Affiche les erreurs dans les messages pour le débogage
+            messages.error(request, f"Erreur lors de la sauvegarde : {form.errors}")
     else:
         form = UserUpdateForm(instance=user)
     return render(request, 'user_edit.html', {'form': form, 'user': user})
+
 
 def user_delete(request, user_id):
     """Vue pour supprimer un utilisateur."""
@@ -217,3 +246,39 @@ def export_reports_pdf(request):
     response = HttpResponse(pdf, content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="rapports.pdf"'
     return response
+
+def traiter_demande_suppression(request, demande_id):
+    demande = get_object_or_404(DemandeSuppressionObjet, id=demande_id)
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        if action == 'accepter':
+            # Supprimer l'objet
+            demande.objet.delete()
+            # On peut ensuite supprimer la demande, puisqu'elle n'a plus d'objet associé
+            demande.delete()
+            messages.success(request, "L'objet a été supprimé et la demande traitée.")
+        elif action == 'refuser':
+            # Marquer la demande comme refusée et supprimer la notification si besoin
+            demande.status = 'refusée'
+            demande.date_traitement = timezone.now()
+            demande.delete()  # ou demande.save() si vous souhaitez conserver la trace
+            messages.info(request, "La demande de suppression a été refusée.")
+        return redirect('tableau_de_bord')
+    # Pour un GET, on affiche la page de confirmation
+    return render(request, 'traiter_demande_suppression.html', {'demande': demande})
+
+def gestion_utilisateurs(request):
+    query = request.GET.get('q', '')
+    type_membre = request.GET.get('type_membre', '')
+    utilisateurs = Utilisateur.objects.all()
+
+    if query:
+        utilisateurs = utilisateurs.filter(
+            Q(username__icontains=query) | Q(first_name__icontains=query) | Q(last_name__icontains=query))
+
+    if type_membre:
+        utilisateurs = utilisateurs.filter(type_membre__iexact=type_membre)
+
+    context = {'utilisateurs': utilisateurs}
+    return render(request, 'gestion_utilisateurs.html', context)
+

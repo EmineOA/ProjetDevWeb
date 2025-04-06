@@ -14,8 +14,13 @@
       margin: 0 15px;
     }
     .navbar-brand img {
-      height: 50px;
+      height: 30px;
       margin-right: 8px;
+    }
+    .user-info {
+      text-align: right;
+      margin-right: 15px;
+      font-size: 0.9rem;
     }
     .user-photo {
       width: 35px;
@@ -23,112 +28,114 @@
       object-fit: cover;
       border-radius: 50%;
     }
-    .user-info {
-      text-align: right;
-      font-size: 0.9rem;
+    /* Style pour les toasts */
+    .toast {
+      min-width: 250px;
+      margin-bottom: 10px;
     }
   </style>
   {% block extra_css %}{% endblock %}
 </head>
 <body>
-  <!-- Header commun avec navigation -->
-  <header>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <div class="container-fluid">
-        <!-- Logo personnalisé défini par l'administrateur, redirige vers la page d'accueil Information -->
-        <a class="navbar-brand" href="{% url 'information_home' %}">
-          {% if appearance and appearance.logo_url %}
-            <img src="{{ appearance.logo_url }}" alt="Logo de l'école" class="img-fluid">
-          {% else %}
-            <img src="https://via.placeholder.com/150x50?text=Ecole+Intelligente" alt="Logo de l'école" class="img-fluid">
-          {% endif %}
-        </a>
-        <!-- Navigation centrale : affiche les modules si l'utilisateur est connecté -->
-        {% if request.user.is_authenticated %}
-          <ul class="navbar-nav mx-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'visualisation_home' %}">Visualisation</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'gestion_home' %}">Gestion</a>
-            </li>
-            <li class="nav-item">
-              {% if request.user.type_membre == "administrateur" %}
-                <a class="nav-link" href="{% url 'tableau_de_bord' %}">Administration</a>
-              {% else %}
-                <a class="nav-link disabled" href="#">Administration</a>
-              {% endif %}
-            </li>
-          </ul>
-        {% endif %}
-        <!-- Partie droite : affichage conditionnel pour authentification -->
-        <div class="d-flex align-items-center">
-          {% if request.user.is_authenticated %}
-            <!-- L'image de profil est cliquable et redirige vers la page de profil -->
-            <a href="{% url 'profile_view' %}">
-              {% if request.user.photo %}
-                <img class="user-photo" src="{{ request.user.photo.url }}" alt="Photo de profil">
-              {% else %}
-                <img class="user-photo" src="https://via.placeholder.com/35" alt="Photo de profil">
+  <!-- Exemple de header dans base.html -->
+<header>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <!-- Logo redirigeant vers la page Information -->
+      <a class="navbar-brand d-flex align-items-center" href="{% url 'information_home' %}">
+        <img src="https://via.placeholder.com/80x30" alt="Logo">
+        Ecole intelligente
+      </a>
+      <!-- Liens vers les modules -->
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'information_home' %}">Information</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'visualisation_home' %}">Visualisation</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'gestion_home' %}">Gestion</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'tableau_de_bord' %}">Administration</a>
+        </li>
+      </ul>
+      <!-- Partie droite : notifications, info utilisateur et photo de profil -->
+      <div class="d-flex align-items-center">
+        {% if request.user.is_authenticated and request.user.is_superuser %}
+          <div class="dropdown mr-3">
+            <a class="nav-link dropdown-toggle" href="#" id="notificationDropdown" role="button" data-toggle="dropdown">
+              🔔
+              {% if admin_notifications %}
+                <span class="badge badge-danger">{{ admin_notifications|length }}</span>
               {% endif %}
             </a>
-            <div class="user-info ml-2 mr-2">
-              [{{ request.user.type_membre|capfirst }}] {{ request.user.username }}<br>
-              XP: {{ request.user.xp }} - Niveau: {{ request.user.niveau }}
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="notificationDropdown">
+              {% for notif in admin_notifications %}
+                <a class="dropdown-item" href="{{ notif.link }}">{{ notif.title }}</a>
+              {% empty %}
+                <span class="dropdown-item">Aucune notification</span>
+              {% endfor %}
             </div>
-            <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
-              {% csrf_token %}
-            </form>
-            <a href="#" class="btn btn-outline-secondary" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-              Se déconnecter
-            </a>
+          </div>
+        {% endif %}
+        {% if request.user.is_authenticated %}
+          <div class="user-info mr-2">
+            [{{ request.user.get_full_name|default:request.user.username }}] XP: {{ request.user.xp }} | Niveau: {{ request.user.niveau }}
+          </div>
+          {% if request.user.photo %}
+            <img src="{{ request.user.photo.url }}" alt="Photo de profil" class="user-photo mr-2">
           {% else %}
-            <a href="{% url 'login' %}" class="btn btn-primary mr-2">Login</a>
-            <a href="{% url 'inscription' %}" class="btn btn-secondary">S'inscrire</a>
+            <!-- Image par défaut si aucune photo n'est définie -->
+            <img src="https://via.placeholder.com/35" alt="Photo de profil" class="user-photo mr-2">
           {% endif %}
-        </div>
+          <a href="{% url 'logout' %}" class="btn btn-outline-secondary">Déconnexion</a>
+        {% else %}
+          <a href="{% url 'login' %}" class="btn btn-outline-primary">Connexion / Inscription</a>
+        {% endif %}
       </div>
-    </nav>
-  </header>
-
-  <!-- Bloc Toast pour afficher les messages -->
-  <div aria-live="polite" aria-atomic="true" style="position: fixed; top: 20px; right: 20px; z-index: 1050;">
-    {% for message in messages %}
-      <div class="toast" data-delay="5000" style="min-width: 250px;">
-        <div class="toast-header {% if 'success' in message.tags %}bg-primary{% else %}bg-danger{% endif %} text-white">
-          <strong class="mr-auto">
-            {% if 'success' in message.tags %}
-              Succès
-            {% else %}
-              Erreur
-            {% endif %}
-          </strong>
-          <small>Maintenant</small>
-          <button type="button" class="ml-2 mb-1 close text-white" data-dismiss="toast" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="toast-body">
-          {{ message }}
-        </div>
-      </div>
-    {% endfor %}
-  </div>
+    </div>
+  </nav>
+</header>
 
   <!-- Contenu principal -->
   <div class="container-fluid mt-3">
     {% block content %}{% endblock %}
   </div>
 
-  <!-- Scripts : jQuery, Popper.js, Bootstrap JS, Feather Icons -->
+  <!-- Toasts (notifications) -->
+  {% if messages %}
+    <div aria-live="polite" aria-atomic="true" style="position: fixed; top: 20px; right: 20px; z-index: 1050;">
+      {% for message in messages %}
+        <div class="toast" data-delay="3000">
+          <div class="toast-header">
+            <strong class="mr-auto text-primary">{% if message.tags %}{{ message.tags|capfirst }}{% else %}Info{% endif %}</strong>
+            <small>Maintenant</small>
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
+          </div>
+          <div class="toast-body">
+            {{ message }}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <script>
+      $(document).ready(function(){
+        $('.toast').toast('show');
+      });
+    </script>
+  {% endif %}
+
+  <!-- jQuery, Popper.js et Bootstrap JS -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <!-- Feather Icons -->
   <script src="https://unpkg.com/feather-icons"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', function(){
+    $(document).ready(function(){
       feather.replace();
-      $('.toast').toast('show');
     });
   </script>
   {% block extra_js %}{% endblock %}

@@ -42,7 +42,7 @@ class DemandeSuppressionObjet(models.Model):
         ('acceptée', 'Acceptée'),
         ('refusée', 'Refusée'),
     )
-    objet = models.ForeignKey(ObjetConnecte, on_delete=models.CASCADE, related_name='demandes')
+    objet = models.ForeignKey(ObjetConnecte, on_delete=models.CASCADE, related_name='demandes', null=True, blank=True)
     utilisateur = models.ForeignKey(Utilisateur, on_delete=models.CASCADE, related_name='demandes_suppression')
     raison = models.TextField(null=True, blank=True)
     status = models.CharField(max_length=20, choices=STATUTS, default='en attente')
@@ -81,3 +81,19 @@ class ConfigurationGlobale(models.Model):
 
     def __str__(self):
         return self.cle
+
+class DemandeSuppressionObjet(models.Model):
+    STATUTS = (
+        ('en attente', 'En attente'),
+        ('acceptée', 'Acceptée'),
+        ('refusée', 'Refusée'),
+    )
+    objet = models.ForeignKey(ObjetConnecte, on_delete=models.CASCADE, related_name='demandes')
+    utilisateur = models.ForeignKey(Utilisateur, on_delete=models.CASCADE, related_name='demandes_suppression')
+    raison = models.TextField(null=True, blank=True)
+    status = models.CharField(max_length=20, choices=STATUTS, default='en attente')
+    date_creation = models.DateTimeField(auto_now_add=True)
+    date_traitement = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f"Demande pour {self.objet.nom} par {self.utilisateur.username}"

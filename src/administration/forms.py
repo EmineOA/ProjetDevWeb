@@ -11,7 +11,22 @@ class UserAddForm(forms.ModelForm):
 class UserUpdateForm(forms.ModelForm):
     class Meta:
         model = Utilisateur
-        fields = ['email', 'type_membre', 'xp']
+        # Vous pouvez ajuster cette liste pour inclure tous les champs que vous souhaitez rendre modifiables.
+        # Par exemple, ici j'inclus username, first_name, last_name, email, age, sexe, date_naissance, type_membre, photo, xp, et niveau.
+        fields = [
+            'username',
+            'first_name',
+            'last_name',
+            'email',
+            'age',
+            'sexe',
+            'date_naissance',
+            'type_membre',
+            'photo',
+            'xp',
+            'niveau',
+            'est_verifie'
+        ]
 
 class ApparenceForm(forms.ModelForm):
     class Meta:

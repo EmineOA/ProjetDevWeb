@@ -1,52 +1,63 @@
 {% extends 'base.html' %}
 
-{% block title %}Visualisation{% endblock %}
+{% block title %}Visualisation - Tableau de Bord{% endblock %}
 
 {% block content %}
-<div class="container-fluid mt-4">
-  <!-- Titre principal -->
-  <h1 class="text-center mb-5">VISUALISATION</h1>
+<div class="row">
+  <!-- Sidebar spécifique au module Visualisation -->
+  <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+    <div class="position-sticky pt-3">
+      <ul class="nav flex-column">
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'visualisation_home' %}active{% endif %}" href="{% url 'visualisation_home' %}">
+            <span data-feather="home"></span> Tableau de Bord
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'visualisation_objets' %}active{% endif %}" href="{% url 'visualisation_objets' %}">
+            <span data-feather="layers"></span> Objets Connectés
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'visualisation_profil' %}active{% endif %}" href="{% url 'visualisation_profil' %}">
+            <span data-feather="user"></span> Profil
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
 
-  <div class="row justify-content-center">
-    <!-- Carte "PROFIL" -->
-    <div class="col-md-3 mb-4">
-      <div class="card text-center shadow">
-        <div class="card-body">
-          <!-- Image (placeholder ou autre) -->
-          <img
-            src="https://via.placeholder.com/200x150"
-            alt="Profil"
-            class="img-fluid mb-3"
-          >
-          <h5 class="card-title">PROFIL</h5>
-          <p class="card-text">
-            Consultez et modifiez vos informations personnelles.
-          </p>
-          <!-- Lien vers la page de profil -->
-          <a href="{% url 'profil' %}" class="btn btn-primary">Accéder</a>
+  <!-- Zone de contenu principal -->
+  <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+    <div class="jumbotron mt-3">
+      <h1 class="display-4">Bienvenue sur le tableau de bord de Visualisation</h1>
+      <p class="lead">Visualisez et suivez l'état de vos objets connectés ainsi que votre profil.</p>
+      <hr class="my-4">
+      <p>Utilisez la barre latérale pour naviguer entre les différentes sections.</p>
+    </div>
+
+    <div class="row">
+      <!-- Carte pour Objets Connectés -->
+      <div class="col-md-6">
+        <div class="card text-white bg-info mb-3">
+          <div class="card-body">
+            <h5 class="card-title">Objets Connectés</h5>
+            <p class="card-text">Accédez à la liste de vos objets connectés et consultez leurs informations.</p>
+            <a href="{% url 'visualisation_objets' %}" class="btn btn-light">Accéder</a>
+          </div>
+        </div>
+      </div>
+      <!-- Carte pour Profil -->
+      <div class="col-md-6">
+        <div class="card text-white bg-success mb-3">
+          <div class="card-body">
+            <h5 class="card-title">Profil</h5>
+            <p class="card-text">Consultez et modifiez vos informations personnelles.</p>
+            <a href="{% url 'visualisation_profil' %}" class="btn btn-light">Accéder</a>
+          </div>
         </div>
       </div>
     </div>
-
-    <!-- Carte "Objets Connectés" -->
-    <div class="col-md-3 mb-4">
-      <div class="card text-center shadow">
-        <div class="card-body">
-          <!-- Image (placeholder ou autre) -->
-          <img
-            src="https://via.placeholder.com/200x150"
-            alt="Objets Connectés"
-            class="img-fluid mb-3"
-          >
-          <h5 class="card-title">Objets Connectés</h5>
-          <p class="card-text">
-            Visualisez la liste des objets connectés.
-          </p>
-          <!-- Lien vers la page listant les objets connectés -->
-          <a href="{% url 'visualisation_objets' %}" class="btn btn-primary">Accéder</a>
-        </div>
-      </div>
-    </div>
-  </div>
+  </main>
 </div>
 {% endblock %}

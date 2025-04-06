@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}Profil de {{ user_profile.username }}{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+  <h1 class="mb-4">Profil de {{ user_profile.username }}</h1>
+  <div class="row">
+    <div class="col-md-4">
+      {% if user_profile.photo %}
+        <img src="{{ user_profile.photo.url }}" alt="Photo de profil" class="img-thumbnail">
+      {% else %}
+        <img src="https://via.placeholder.com/150" alt="Photo de profil" class="img-thumbnail">
+      {% endif %}
+    </div>
+    <div class="col-md-8">
+      <p><strong>Nom complet :</strong> {{ user_profile.first_name }} {{ user_profile.last_name }}</p>
+      <p><strong>Email :</strong> {{ user_profile.email }}</p>
+      <p><strong>Âge :</strong> {{ user_profile.age }}</p>
+      <p><strong>Sexe :</strong> {{ user_profile.sexe }}</p>
+      <p><strong>Date de naissance :</strong> {{ user_profile.date_naissance }}</p>
+      <p><strong>Type de membre :</strong> {{ user_profile.type_membre }}</p>
+      <p><strong>XP :</strong> {{ user_profile.xp }}</p>
+      <p><strong>Niveau :</strong> {{ user_profile.niveau }}</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

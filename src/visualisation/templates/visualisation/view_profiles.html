@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Liste des Profils{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+  <h1 class="mb-4">Recherche de membres</h1>
+  <form method="get" class="form-inline mb-3">
+    <input type="text" name="q" value="{{ query }}" class="form-control mr-2" placeholder="Rechercher par username, prénom ou nom">
+    <select name="type_membre" class="form-control mr-2">
+      <option value="">Tous les types</option>
+      <option value="simple" {% if type_membre == "simple" %}selected{% endif %}>Simple</option>
+      <option value="complexe" {% if type_membre == "complexe" %}selected{% endif %}>Complexe</option>
+      <option value="administrateur" {% if type_membre == "administrateur" %}selected{% endif %}>Administrateur</option>
+    </select>
+    <button type="submit" class="btn btn-primary">Rechercher</button>
+  </form>
+
+  {% if profiles %}
+    <div class="list-group">
+      {% for profile in profiles %}
+        <a href="{% url 'view_profil' profile.id %}" class="list-group-item list-group-item-action">
+          <strong>{{ profile.username }}</strong> - {{ profile.first_name }} {{ profile.last_name }} ({{ profile.type_membre }})
+        </a>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>Aucun profil trouvé.</p>
+  {% endif %}
+</div>
+{% endblock %}

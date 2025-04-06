@@ -1,10 +1,87 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}Objets Connectés{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="row">
+    <!-- Sidebar identique à l'accueil du module Visualisation -->
+    <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+      <div class="position-sticky pt-3">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'visualisation_home' %}active{% endif %}" href="{% url 'visualisation_home' %}">
+              <span data-feather="home"></span> Tableau de Bord
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'visualisation_objets' %}active{% endif %}" href="{% url 'visualisation_objets' %}">
+              <span data-feather="layers"></span> Objets connectés
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'visualisation_profil' %}active{% endif %}" href="{% url 'visualisation_profil' %}">
+              <span data-feather="user"></span> Profil
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Zone de contenu principal -->
+    <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+      <!-- Barre de recherche avec filtres -->
+      <form method="get" class="mb-4">
+        <div class="form-row">
+          <div class="col-md-4 mb-2">
+            <input type="text" name="q" value="{{ request.GET.q }}" class="form-control" placeholder="Rechercher un objet">
+          </div>
+          <div class="col-md-3 mb-2">
+            <select name="etat" class="form-control">
+              <option value="">Tous les états</option>
+              <option value="activé" {% if request.GET.etat == 'activé' %}selected{% endif %}>Activé</option>
+              <option value="en veille" {% if request.GET.etat == 'en veille' %}selected{% endif %}>En veille</option>
+              <option value="hors ligne" {% if request.GET.etat == 'hors ligne' %}selected{% endif %}>Hors ligne</option>
+            </select>
+          </div>
+          <div class="col-md-3 mb-2">
+            <select name="categorie" class="form-control">
+              <option value="">Toutes les catégories</option>
+              {% for cat in categories %}
+                <option value="{{ cat.id }}" {% if request.GET.categorie == cat.id|stringformat:"s" %}selected{% endif %}>{{ cat.nom }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-md-2 mb-2">
+            <button type="submit" class="btn btn-primary btn-block">Rechercher</button>
+          </div>
+        </div>
+      </form>
+
+      <!-- Affichage des objets sous forme de "petits rectangles" -->
+      <div class="row">
+        {% for objet in objets %}
+        <div class="col-md-4 mb-4">
+          <div class="card">
+            {% if objet.image %}
+              <img src="{{ objet.image.url }}" class="card-img-top" alt="{{ objet.nom }}">
+            {% else %}
+              <img src="https://via.placeholder.com/200x150" class="card-img-top" alt="{{ objet.nom }}">
+            {% endif %}
+            <div class="card-body">
+              <h5 class="card-title">{{ objet.nom }}</h5>
+              <p class="card-text">{{ objet.description|truncatewords:20 }}</p>
+              <a href="{% url 'visualisation_objet_detail' objet.id %}" class="btn btn-primary">Voir les détails</a>
+            </div>
+          </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+          <p class="text-center">Aucun objet trouvé.</p>
+        </div>
+        {% endfor %}
+      </div>
+    </main>
+  </div>
+</div>
+{% endblock %}

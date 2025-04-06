@@ -1,26 +1,46 @@
-{% extends 'visualisation/base_visualisation.html' %}
+{% extends 'base.html' %}
 
-{% block title %}Détail de l'objet{% endblock %}
+{% block title %}Détails de l'objet{% endblock %}
 
 {% block content %}
-<div class="container-fluid">
+<div class="container">
   <div class="row">
-    <!-- Sidebar injectée par le template de base -->
-
+    <!-- Sidebar identique -->
+    <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+      <div class="position-sticky pt-3">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'visualisation_home' %}">
+              <span data-feather="home"></span> Tableau de Bord
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'visualisation_objets' %}">
+              <span data-feather="layers"></span> Objets connectés
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'visualisation_profil' %}">
+              <span data-feather="user"></span> Profil
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <!-- Zone de contenu principal -->
     <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
-      <div class="pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Détail de l'objet : {{ objet.nom }}</h1>
-      </div>
-      <div>
-        <p><strong>ID :</strong> {{ objet.id }}</p>
-        <p><strong>Nom :</strong> {{ objet.nom }}</p>
-        <p><strong>Description :</strong> {{ objet.description }}</p>
-        <p><strong>Catégorie :</strong> {% if objet.categorie %}{{ objet.categorie.nom }}{% else %}N/A{% endif %}</p>
-        <p><strong>État :</strong> {{ objet.etat }}</p>
-        <p><strong>Salle :</strong> {% if objet.salle %}{{ objet.salle.nom }}{% else %}N/A{% endif %}</p>
-        <p><strong>Consommation :</strong> {{ objet.consommation_energetique }} kWh</p>
-      </div>
-      <a href="{% url 'visualisation_home' %}" class="btn btn-secondary mt-3">Retour</a>
+      <h1>{{ objet.nom }}</h1>
+      {% if objet.image %}
+        <img src="{{ objet.image.url }}" class="img-fluid mb-3" alt="{{ objet.nom }}">
+      {% else %}
+        <img src="https://via.placeholder.com/400x300" class="img-fluid mb-3" alt="{{ objet.nom }}">
+      {% endif %}
+      <p><strong>Description:</strong> {{ objet.description }}</p>
+      <p><strong>Catégorie:</strong> {% if objet.categorie %}{{ objet.categorie.nom }}{% else %}N/A{% endif %}</p>
+      <p><strong>État:</strong> {{ objet.etat }}</p>
+      <p><strong>Salle:</strong> {% if objet.salle %}{{ objet.salle.nom }}{% else %}N/A{% endif %}</p>
+      <p><strong>Consommation énergétique:</strong> {{ objet.consommation_energetique }} kWh</p>
+      <a href="{% url 'visualisation_objets' %}" class="btn btn-secondary">Retour à la liste</a>
     </main>
   </div>
 </div>

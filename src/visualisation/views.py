@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 
 from src.utilisateurs.decorators import role_required
-from src.objets.models import ObjetConnecte
+from src.objets.models import ObjetConnecte, CategorieObjet
 from django.shortcuts import get_object_or_404
 from src.utilisateurs.models import Utilisateur
 from .forms import EditProfilForm
@@ -14,18 +14,8 @@ User = get_user_model()
 
 @role_required('visualisation')
 def visualisation_home(request):
-    """
-    Affiche la page d’accueil du module Visualisation avec une liste d’objets connectés.
-    La barre de recherche avec filtres (état et catégorie) est disponible dans le template.
-    """
-    objets = ObjetConnecte.objects.all()
-    # Si vous avez un modèle pour les catégories, récupérez-les, sinon passez une liste vide
-    categories = []  # Par exemple : CategorieObjet.objects.all()
-    context = {
-        'objets': objets,
-        'categories': categories,
-    }
-    return render(request, 'visualisation/home.html', context)
+    # Page d'accueil du module visualisation
+    return render(request, 'visualisation/home.html')
 
 @role_required('visualisation')
 def visualisation_profil(request):
@@ -35,28 +25,51 @@ def visualisation_profil(request):
 
 @role_required('visualisation')
 def visualisation_objets(request):
-    # Ici, vous récupérez la liste des objets connectés
-    from src.objets.models import ObjetConnecte
+    # Récupération des paramètres GET
+    query = request.GET.get('q', '')             # terme de recherche
+    etat_filter = request.GET.get('etat', '')    # filtre sur l'état
+    cat_filter = request.GET.get('categorie', '') # filtre sur la catégorie
+
+    # On récupère tous les objets
     objets = ObjetConnecte.objects.all()
-    return render(request, 'visualisation/objets.html', {'objets': objets})
 
+    # Filtrage par recherche (nom ou description)
+    if query:
+        objets = objets.filter(
+            Q(nom__icontains=query) |
+            Q(description__icontains=query)
+        )
 
-def objet_detail(request, objet_id):
-    """
-    Affiche le détail d’un objet connecté.
-    """
+    # Filtrage par état
+    if etat_filter:
+        objets = objets.filter(etat=etat_filter)
+
+    # Filtrage par catégorie
+    if cat_filter:
+        objets = objets.filter(categorie__id=cat_filter)
+
+    # Pour alimenter la liste déroulante des catégories
+    categories = CategorieObjet.objects.all()
+
+    context = {
+        'objets': objets,
+        'query': query,
+        'etat': etat_filter,
+        'categorie': cat_filter,
+        'categories': categories,
+    }
+    return render(request, 'visualisation/objets_list.html', context)
+
+def visualisation_objet_detail(request, objet_id):
     objet = get_object_or_404(ObjetConnecte, id=objet_id)
-    context = {'objet': objet}
-    return render(request, 'visualisation/objet_detail.html', context)
+    return render(request, 'visualisation/objet_detail.html', {'objet': objet})
 
-def profil(request):
-    """
-    Affiche le profil de l’utilisateur connecté.
-    """
+def profil_home(request):
+    # Affiche la page de profil de l'utilisateur connecté
+    user_profile = request.user
     if not request.user.is_authenticated:
         return redirect('login')
-    return render(request, 'visualisation/profil.html', {'user': request.user})
-
+    return render(request, 'visualisation/profil.html', {'user_profile': user_profile})
 
 def modifier_profil(request):
     """
@@ -136,16 +149,9 @@ def edit_profil(request):
         form = EditProfilForm(instance=user)
     return render(request, 'visualisation/edit_profil.html', {'form': form})
 
-def view_profil(request, user_id=None):
-    """
-    Affiche le profil d'un utilisateur.
-    Si user_id est None, affiche le profil de l'utilisateur connecté.
-    Sinon, affiche le profil de l'utilisateur correspondant à user_id.
-    """
-    if user_id is None:
-        user_profile = request.user
-    else:
-        user_profile = get_object_or_404(Utilisateur, id=user_id)
+def view_profil(request, user_id):
+    # Affiche le profil d'un autre membre
+    user_profile = get_object_or_404(Utilisateur, id=user_id)
     return render(request, 'visualisation/view_profil.html', {'user_profile': user_profile})
 
 
@@ -216,4 +222,31 @@ def change_password(request):
 
     return render(request, 'visualisation/change_password.html')
 
+def objets_list(request):
+    # Barre de recherche avec deux filtres : état et catégorie
+    query = request.GET.get('q', '')
+    etat_filter = request.GET.get('etat', '')
+    categorie_filter = request.GET.get('categorie', '')
+
+    objets = ObjetConnecte.objects.all()
+
+    if query:
+        objets = objets.filter(nom__icontains=query)
+    if etat_filter:
+        objets = objets.filter(etat=etat_filter)
+    if categorie_filter:
+        objets = objets.filter(categorie__id=categorie_filter)
+
+    # Vous pouvez passer la liste des catégories dans le contexte si nécessaire
+    from src.objets.models import CategorieObjet
+    categories = CategorieObjet.objects.all()
+
+    context = {
+        'objets': objets,
+        'query': query,
+        'etat': etat_filter,
+        'categorie': categorie_filter,
+        'categories': categories,
+    }
+    return render(request, 'visualisation/objets_list.html', context)
 

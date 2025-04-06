@@ -1,0 +1,28 @@
+{% extends 'visualisation/base_visualisation.html' %}
+
+{% block title %}Mon Profil{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="row">
+    <!-- Sidebar injectée par le template de base -->
+
+    <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+      <div class="pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Mon Profil</h1>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Informations personnelles</h5>
+          <p><strong>Username :</strong> {{ user.username }}</p>
+          <p><strong>Email :</strong> {{ user.email }}</p>
+          <p><strong>Date de naissance :</strong> {{ user.date_naissance|date:"d/m/Y" }}</p>
+          <p><strong>Type de membre :</strong> {{ user.type_membre }}</p>
+          <!-- Ajoutez d'autres informations publiques selon vos besoins -->
+        </div>
+      </div>
+      <a href="{% url 'modifier_profil' %}" class="btn btn-primary mt-3">Modifier mon profil</a>
+    </main>
+  </div>
+</div>
+{% endblock %}

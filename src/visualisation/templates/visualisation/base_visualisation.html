@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block extra_css %}
+  {{ block.super }}
+  <style>
+    /* Styles spécifiques au module Visualisation */
+    .sidebar-visualisation {
+      background-color: #e9ecef;
+    }
+  </style>
+{% endblock %}
+
+{% block sidebar %}
+  <!-- Sidebar spécifique au module Visualisation -->
+  <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar-visualisation collapse">
+    <div class="position-sticky pt-3">
+      <ul class="nav flex-column">
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'visualisation_home' %}active{% endif %}" href="{% url 'visualisation_home' %}">
+            <span data-feather="home"></span> Tableau de bord
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'profil' %}active{% endif %}" href="{% url 'profil' %}">
+            <span data-feather="user"></span> Profil
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'objet_detail' %}active{% endif %}" href="#">
+            <span data-feather="layers"></span> Objets Connectés
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+{% endblock %}

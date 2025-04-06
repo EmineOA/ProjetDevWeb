@@ -3,28 +3,49 @@
 {% block title %}Visualisation{% endblock %}
 
 {% block content %}
-<div class="text-center">
-  <h1 class="mb-4">VISUALISATION</h1>
+<div class="container-fluid mt-4">
+  <!-- Titre principal -->
+  <h1 class="text-center mb-5">VISUALISATION</h1>
+
   <div class="row justify-content-center">
-    <div class="col-md-3">
-      <a href="{% url 'visualisation_profil' %}" class="text-decoration-none">
-        <div class="card mb-4">
-          <div class="card-body">
-            <img src="https://via.placeholder.com/200x120?text=Profil" alt="Profil" class="img-fluid mb-2">
-            <h5 class="card-title">PROFIL</h5>
-          </div>
+    <!-- Carte "PROFIL" -->
+    <div class="col-md-3 mb-4">
+      <div class="card text-center shadow">
+        <div class="card-body">
+          <!-- Image (placeholder ou autre) -->
+          <img
+            src="https://via.placeholder.com/200x150"
+            alt="Profil"
+            class="img-fluid mb-3"
+          >
+          <h5 class="card-title">PROFIL</h5>
+          <p class="card-text">
+            Consultez et modifiez vos informations personnelles.
+          </p>
+          <!-- Lien vers la page de profil -->
+          <a href="{% url 'profil' %}" class="btn btn-primary">Accéder</a>
         </div>
-      </a>
+      </div>
     </div>
-    <div class="col-md-3">
-      <a href="{% url 'visualisation_objets' %}" class="text-decoration-none">
-        <div class="card mb-4">
-          <div class="card-body">
-            <img src="https://via.placeholder.com/200x120?text=Objets" alt="Objets Connectés" class="img-fluid mb-2">
-            <h5 class="card-title">Objets Connectés</h5>
-          </div>
+
+    <!-- Carte "Objets Connectés" -->
+    <div class="col-md-3 mb-4">
+      <div class="card text-center shadow">
+        <div class="card-body">
+          <!-- Image (placeholder ou autre) -->
+          <img
+            src="https://via.placeholder.com/200x150"
+            alt="Objets Connectés"
+            class="img-fluid mb-3"
+          >
+          <h5 class="card-title">Objets Connectés</h5>
+          <p class="card-text">
+            Visualisez la liste des objets connectés.
+          </p>
+          <!-- Lien vers la page listant les objets connectés -->
+          <a href="{% url 'visualisation_objets' %}" class="btn btn-primary">Accéder</a>
         </div>
-      </a>
+      </div>
     </div>
   </div>
 </div>

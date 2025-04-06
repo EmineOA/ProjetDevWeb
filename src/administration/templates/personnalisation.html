@@ -5,44 +5,38 @@
 {% block content %}
 <div class="container-fluid">
   <div class="row">
-    <!-- Sidebar commune -->
+    <!-- Sidebar commune au module Administration -->
     <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
       <div class="position-sticky pt-3">
         <ul class="nav flex-column">
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'tableau_de_bord' %}">
-              <span data-feather="home"></span>
-              Tableau de Bord
+            <a class="nav-link {% if request.resolver_match.url_name == 'tableau_de_bord' %}active{% endif %}" href="{% url 'tableau_de_bord' %}">
+              <span data-feather="home"></span> Tableau de Bord
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'gestion_utilisateurs' %}">
-              <span data-feather="users"></span>
-              Gestion des Utilisateurs
+            <a class="nav-link {% if request.resolver_match.url_name == 'gestion_utilisateurs' %}active{% endif %}" href="{% url 'gestion_utilisateurs' %}">
+              <span data-feather="users"></span> Gestion des Utilisateurs
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'gestion_objets_avances' %}">
-              <span data-feather="layers"></span>
-              Gestion des Objets
+            <a class="nav-link {% if request.resolver_match.url_name == 'gestion_objets_avances' %}active{% endif %}" href="{% url 'gestion_objets_avances' %}">
+              <span data-feather="layers"></span> Gestion des Objets
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'securite_maintenance' %}">
-              <span data-feather="shield"></span>
-              Sécurité & Maintenance
+            <a class="nav-link {% if request.resolver_match.url_name == 'securite_maintenance' %}active{% endif %}" href="{% url 'securite_maintenance' %}">
+              <span data-feather="shield"></span> Sécurité & Maintenance
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link active" href="{% url 'personnalisation' %}">
-              <span data-feather="sliders"></span>
-              Personnalisation
+              <span data-feather="sliders"></span> Personnalisation
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'rapports_avances' %}">
-              <span data-feather="bar-chart-2"></span>
-              Rapports Avancés
+            <a class="nav-link {% if request.resolver_match.url_name == 'rapports_avances' %}active{% endif %}" href="{% url 'rapports_avances' %}">
+              <span data-feather="bar-chart-2"></span> Rapports Avancés
             </a>
           </li>
         </ul>
@@ -50,7 +44,7 @@
     </nav>
 
     <!-- Zone de contenu principal -->
-    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+    <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
       <div class="pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Personnalisation de la Plateforme</h1>
       </div>

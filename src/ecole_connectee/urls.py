@@ -1,6 +1,7 @@
-from django.contrib import admin
 from django.urls import path, include
 from .views import index
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('',index, name="index"),
@@ -11,4 +12,4 @@ urlpatterns = [
     path('information/', include('src.information.urls')),
     path('visualisation/', include('src.visualisation.urls')),
     path('gestion/', include('src.gestion.urls')),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

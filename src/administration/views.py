@@ -140,12 +140,10 @@ def user_edit(request, user_id):
             messages.success(request, "L'utilisateur a été mis à jour avec succès.")
             return redirect('gestion_utilisateurs')
         else:
-            # Affiche les erreurs dans les messages pour le débogage
             messages.error(request, f"Erreur lors de la sauvegarde : {form.errors}")
     else:
         form = UserUpdateForm(instance=user)
     return render(request, 'user_edit.html', {'form': form, 'user': user})
-
 
 def user_delete(request, user_id):
     """Vue pour supprimer un utilisateur."""
@@ -178,18 +176,18 @@ def backup_db(request):
     return response
 
 def personnalisation(request):
-    # Tente de récupérer l'instance d'apparence, sinon en crée une nouvelle (utilisation d'un identifiant fixe, ex: 1)
-    instance, created = Apparence.objects.get_or_create(id=1)
+    # On récupère l'instance d'Apparence (id=1)
+    apparence, created = Apparence.objects.get_or_create(id=1)
     if request.method == 'POST':
-        form = ApparenceForm(request.POST, instance=instance)
+        form = ApparenceForm(request.POST, request.FILES, instance=apparence)
         if form.is_valid():
             form.save()
-            # Optionnel : ajouter un message de succès
+            messages.success(request, "La personnalisation a été enregistrée avec succès.")
             return redirect('personnalisation')
     else:
-        form = ApparenceForm(instance=instance)
-    context = {'form': form}
-    return render(request, 'personnalisation.html', context)
+        form = ApparenceForm(instance=apparence)
+    return render(request, 'personnalisation.html', {'form': form})
+
 
 
 def export_reports_csv(request):

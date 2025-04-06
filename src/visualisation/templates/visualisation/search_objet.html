@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}Rechercher un objet connecté{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="row">
+    <!-- Sidebar pour le module Visualisation -->
+    <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+      <div class="position-sticky pt-3">
+        <ul class="nav flex-column">
+          <!-- Lien vers l'accueil du module visualisation -->
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'visualisation_home' %}">Mon profil</a>
+          </li>
+          <!-- Lien vers la recherche de profil (selon votre organisation) -->
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'visualisation_recherche_profil' %}">Rechercher un profil</a>
+          </li>
+          <!-- Lien actif pour la recherche d'objet -->
+          <li class="nav-item">
+            <a class="nav-link active" href="{% url 'visualisation_recherche_objet' %}">Rechercher un objet</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Zone de contenu principal -->
+    <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+      <h1 class="my-4">Rechercher un objet connecté</h1>
+
+      <!-- Formulaire de recherche -->
+      <form method="get" class="mb-4">
+        <div class="form-group row">
+          <label for="nom_objet" class="col-sm-2 col-form-label">Nom de l’objet</label>
+          <div class="col-sm-6">
+            <input 
+              type="text" 
+              class="form-control" 
+              id="nom_objet" 
+              name="q" 
+              value="{{ request.GET.q }}" 
+              placeholder="Ex: Ampoule, Radiateur..."
+            >
+          </div>
+          <div class="col-sm-2">
+            <button type="submit" class="btn btn-primary">Rechercher</button>
+          </div>
+        </div>
+      </form>
+
+      <!-- Zone d'affichage des résultats -->
+      <div class="row">
+        {% for objet in objets %}
+          <div class="col-md-4 mb-3">
+            <div class="card h-100 shadow-sm">
+              <div class="card-body">
+                <h5 class="card-title">{{ objet.nom }}</h5>
+                <p class="card-text">
+                  Catégorie : 
+                  {% if objet.categorie %}
+                    {{ objet.categorie.nom }}
+                  {% else %}
+                    N/A
+                  {% endif %}
+                  <br>
+                  État : {{ objet.etat }}
+                </p>
+                <!-- Lien vers la page de détail de l’objet -->
+                <a 
+                  href="{% url 'visualisation_objet_detail' objet.id %}" 
+                  class="btn btn-sm btn-secondary"
+                >
+                  Voir plus
+                </a>
+              </div>
+            </div>
+          </div>
+        {% empty %}
+          <p>Aucun objet trouvé.</p>
+        {% endfor %}
+      </div>
+    </main>
+  </div>
+</div>
+{% endblock %}

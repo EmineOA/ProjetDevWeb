@@ -65,6 +65,9 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'src.ecole_connectee.urls'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 
 TEMPLATES = [
     {
@@ -87,6 +90,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'src.ecole_connectee.context_processors.appearance_context',
                 'src.administration.context_processors.admin_notifications',
+                'src.administration.context_processors.site_settings',
             ],
         },
     },

@@ -1,0 +1,27 @@
+{% extends 'visualisation/base_visualisation.html' %}
+
+{% block title %}Détail de l'objet{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="row">
+    <!-- Sidebar injectée par le template de base -->
+
+    <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+      <div class="pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Détail de l'objet : {{ objet.nom }}</h1>
+      </div>
+      <div>
+        <p><strong>ID :</strong> {{ objet.id }}</p>
+        <p><strong>Nom :</strong> {{ objet.nom }}</p>
+        <p><strong>Description :</strong> {{ objet.description }}</p>
+        <p><strong>Catégorie :</strong> {% if objet.categorie %}{{ objet.categorie.nom }}{% else %}N/A{% endif %}</p>
+        <p><strong>État :</strong> {{ objet.etat }}</p>
+        <p><strong>Salle :</strong> {% if objet.salle %}{{ objet.salle.nom }}{% else %}N/A{% endif %}</p>
+        <p><strong>Consommation :</strong> {{ objet.consommation_energetique }} kWh</p>
+      </div>
+      <a href="{% url 'visualisation_home' %}" class="btn btn-secondary mt-3">Retour</a>
+    </main>
+  </div>
+</div>
+{% endblock %}

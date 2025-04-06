@@ -1,5 +1,6 @@
 from src.objets.models import DemandeSuppressionObjet
 from django.urls import reverse
+from .models import Apparence
 
 
 def admin_notifications(request):
@@ -15,3 +16,9 @@ def admin_notifications(request):
             })
         return {'admin_notifications': notifications}
     return {}
+
+def site_settings(request):
+    # On récupère l'instance d'Apparence, en créant une nouvelle si nécessaire (id=1)
+    apparence, created = Apparence.objects.get_or_create(id=1)
+    return {'apparence': apparence}
+

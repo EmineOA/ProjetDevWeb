@@ -31,8 +31,14 @@ class UserUpdateForm(forms.ModelForm):
 class ApparenceForm(forms.ModelForm):
     class Meta:
         model = Apparence
-        fields = ['theme_color', 'logo_url']
+        fields = ['background_color', 'logo']
         widgets = {
-            'theme_color': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '#ffffff'}),
-            'logo_url': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'http://...'}),
+            'background_color': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': '#ffffff'
+            }),
+            'logo': forms.ClearableFileInput(attrs={
+                'class': 'form-control-file'
+            }),
         }
+

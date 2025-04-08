@@ -5,28 +5,121 @@
 {% block content %}
 <div class="container-fluid">
   <div class="row">
-    <!-- Sidebar commune -->
+    <!-- Sidebar commune (vous pouvez conserver celle existante) -->
     <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
       <div class="position-sticky pt-3">
         <ul class="nav flex-column">
-          <li class="nav-item"><a class="nav-link" href="{% url 'tableau_de_bord' %}">Tableau de Bord</a></li>
-          <li class="nav-item"><a class="nav-link active" href="{% url 'gestion_utilisateurs' %}">Gestion des Utilisateurs</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'gestion_objets_avances' %}">Gestion des Objets</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'securite_maintenance' %}">Sécurité & Maintenance</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'personnalisation' %}">Personnalisation</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'rapports_avances' %}">Rapports Avancés</a></li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'tableau_de_bord' %}">
+              <span data-feather="home"></span> Tableau de Bord
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'gestion_utilisateurs' %}">
+              <span data-feather="users"></span> Gestion des Utilisateurs
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'gestion_objets_avances' %}">
+              <span data-feather="layers"></span> Gestion des Objets
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'securite_maintenance' %}">
+              <span data-feather="shield"></span> Sécurité & Maintenance
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'personnalisation' %}">
+              <span data-feather="sliders"></span> Personnalisation
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'rapports_avances' %}">
+              <span data-feather="bar-chart-2"></span> Rapports Avancés
+            </a>
+          </li>
         </ul>
       </div>
     </nav>
 
     <!-- Zone de contenu principal -->
-    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-      <div class="pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Ajouter un utilisateur</h1>
-      </div>
-      <form method="post">
+    <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+      <h1 class="h2 mb-4">Ajouter un utilisateur</h1>
+      <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form.as_p }}
+        <!-- Section Infos Publiques -->
+        <div class="card mb-4">
+          <div class="card-header">
+            Infos Publiques
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              {{ form.username.label_tag }} {{ form.username }}
+              {% if form.username.errors %}<div class="text-danger">{{ form.username.errors }}</div>{% endif %}
+            </div>
+            <div class="form-group">
+              {{ form.email.label_tag }} {{ form.email }}
+              {% if form.email.errors %}<div class="text-danger">{{ form.email.errors }}</div>{% endif %}
+            </div>
+            <div class="form-group">
+              {{ form.first_name.label_tag }} {{ form.first_name }}
+              {% if form.first_name.errors %}<div class="text-danger">{{ form.first_name.errors }}</div>{% endif %}
+            </div>
+            <div class="form-group">
+              {{ form.last_name.label_tag }} {{ form.last_name }}
+              {% if form.last_name.errors %}<div class="text-danger">{{ form.last_name.errors }}</div>{% endif %}
+            </div>
+            <div class="form-group">
+              {{ form.pseudo.label_tag }} {{ form.pseudo }}
+              {% if form.pseudo.errors %}<div class="text-danger">{{ form.pseudo.errors }}</div>{% endif %}
+            </div>
+            <div class="form-group">
+              {{ form.age.label_tag }} {{ form.age }}
+              {% if form.age.errors %}<div class="text-danger">{{ form.age.errors }}</div>{% endif %}
+            </div>
+            <div class="form-group">
+              {{ form.sexe.label_tag }} {{ form.sexe }}
+              {% if form.sexe.errors %}<div class="text-danger">{{ form.sexe.errors }}</div>{% endif %}
+            </div>
+            <div class="form-group">
+              {{ form.date_naissance.label_tag }} {{ form.date_naissance }}
+              {% if form.date_naissance.errors %}<div class="text-danger">{{ form.date_naissance.errors }}</div>{% endif %}
+            </div>
+            <div class="form-group">
+              {{ form.photo.label_tag }} {{ form.photo }}
+              {% if form.photo.errors %}<div class="text-danger">{{ form.photo.errors }}</div>{% endif %}
+            </div>
+            <div class="form-group">
+              {{ form.type_membre.label_tag }} {{ form.type_membre }}
+              {% if form.type_membre.errors %}<div class="text-danger">{{ form.type_membre.errors }}</div>{% endif %}
+            </div>
+            <div class="form-group">
+              {{ form.xp.label_tag }} {{ form.xp }}
+              {% if form.xp.errors %}<div class="text-danger">{{ form.xp.errors }}</div>{% endif %}
+            </div>
+            <div class="form-group">
+              {{ form.niveau.label_tag }} {{ form.niveau }}
+              {% if form.niveau.errors %}<div class="text-danger">{{ form.niveau.errors }}</div>{% endif %}
+            </div>
+          </div>
+        </div>
+        <!-- Section Infos Privées -->
+        <div class="card mb-4">
+          <div class="card-header">
+            Infos Privées
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              {{ form.password1.label_tag }} {{ form.password1 }}
+              {% if form.password1.errors %}<div class="text-danger">{{ form.password1.errors }}</div>{% endif %}
+            </div>
+            <div class="form-group">
+              {{ form.password2.label_tag }} {{ form.password2 }}
+              {% if form.password2.errors %}<div class="text-danger">{{ form.password2.errors }}</div>{% endif %}
+            </div>
+          </div>
+        </div>
         <button type="submit" class="btn btn-primary">Ajouter</button>
       </form>
     </main>

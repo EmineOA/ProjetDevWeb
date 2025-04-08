@@ -123,15 +123,14 @@ def gestion_utilisateurs(request):
 @login_required
 @role_required('administrateur')
 def user_add(request):
-    """Vue pour ajouter un nouvel utilisateur."""
     if request.method == 'POST':
-        form = UserAddForm(request.POST)
+        form = UserAddForm(request.POST, request.FILES)
         if form.is_valid():
-            user = form.save()
-            # Optionnel: définir un mot de passe par défaut
-            user.set_password('mdpParDefaut123')
-            user.save()
+            form.save()
+            messages.success(request, "L'utilisateur a été ajouté avec succès.")
             return redirect('gestion_utilisateurs')
+        else:
+            messages.error(request, "Veuillez corriger les erreurs indiquées ci-dessous.")
     else:
         form = UserAddForm()
     return render(request, 'user_add.html', {'form': form})
@@ -144,10 +143,10 @@ def user_edit(request, user_id):
         form = UserUpdateForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
             form.save()
-            messages.success(request, "L'utilisateur a été mis à jour avec succès.")
+            messages.success(request, "L'utilisateur a été modifié avec succès.")
             return redirect('gestion_utilisateurs')
         else:
-            messages.error(request, f"Erreur lors de la sauvegarde : {form.errors}")
+            messages.error(request, "Veuillez corriger les erreurs ci-dessous.")
     else:
         form = UserUpdateForm(instance=user)
     return render(request, 'user_edit.html', {'form': form, 'user': user})

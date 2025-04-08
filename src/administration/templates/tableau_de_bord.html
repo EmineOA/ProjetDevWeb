@@ -9,39 +9,33 @@
     <div class="position-sticky pt-3">
       <ul class="nav flex-column">
         <li class="nav-item">
-          <a class="nav-link active" href="{% url 'tableau_de_bord' %}">
-            <span data-feather="home"></span>
-            Tableau de Bord
+          <a class="nav-link {% if request.resolver_match.url_name == 'tableau_de_bord' %}active{% endif %}" href="{% url 'tableau_de_bord' %}">
+            <span data-feather="home"></span> Tableau de Bord
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'gestion_utilisateurs' %}">
-            <span data-feather="users"></span>
-            Gestion des Utilisateurs
+          <a class="nav-link {% if request.resolver_match.url_name == 'gestion_utilisateurs' %}active{% endif %}" href="{% url 'gestion_utilisateurs' %}">
+            <span data-feather="users"></span> Gestion des Utilisateurs
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'gestion_objets_avances' %}">
-            <span data-feather="layers"></span>
-            Gestion des Objets
+          <a class="nav-link {% if request.resolver_match.url_name == 'gestion_objets_avances' %}active{% endif %}" href="{% url 'gestion_objets_avances' %}">
+            <span data-feather="layers"></span> Gestion des Objets
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'securite_maintenance' %}">
-            <span data-feather="shield"></span>
-            Sécurité & Maintenance
+          <a class="nav-link {% if request.resolver_match.url_name == 'securite_maintenance' %}active{% endif %}" href="{% url 'securite_maintenance' %}">
+            <span data-feather="shield"></span> Sécurité & Maintenance
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'personnalisation' %}">
-            <span data-feather="sliders"></span>
-            Personnalisation
+          <a class="nav-link {% if request.resolver_match.url_name == 'personnalisation' %}active{% endif %}" href="{% url 'personnalisation' %}">
+            <span data-feather="sliders"></span> Personnalisation
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'rapports_avances' %}">
-            <span data-feather="bar-chart-2"></span>
-            Rapports Avancés
+          <a class="nav-link {% if request.resolver_match.url_name == 'rapports_avances' %}active{% endif %}" href="{% url 'rapports_avances' %}">
+            <span data-feather="bar-chart-2"></span> Rapports Avancés
           </a>
         </li>
       </ul>
@@ -56,12 +50,14 @@
       <hr class="my-4">
       <p>Utilisez la navigation à gauche pour accéder aux différentes sections.</p>
     </div>
+
+    <!-- Première ligne de cartes -->
     <div class="row">
       <div class="col-md-4">
         <div class="card text-white bg-primary mb-3">
           <div class="card-body">
             <h5 class="card-title">Utilisateurs</h5>
-            <p class="card-text">Gestion des utilisateurs et de leurs rôles.</p>
+            <p class="card-text">Gérez les utilisateurs et leurs rôles.</p>
             <a href="{% url 'gestion_utilisateurs' %}" class="btn btn-light">Voir plus</a>
           </div>
         </div>
@@ -70,7 +66,7 @@
         <div class="card text-white bg-success mb-3">
           <div class="card-body">
             <h5 class="card-title">Objets Connectés</h5>
-            <p class="card-text">Gestion avancée des objets connectés.</p>
+            <p class="card-text">Suivi et gestion des objets connectés.</p>
             <a href="{% url 'gestion_objets_avances' %}" class="btn btn-light">Voir plus</a>
           </div>
         </div>
@@ -79,8 +75,30 @@
         <div class="card text-white bg-warning mb-3">
           <div class="card-body">
             <h5 class="card-title">Sécurité & Maintenance</h5>
-            <p class="card-text">Paramètres de sécurité et maintenance.</p>
+            <p class="card-text">Accédez aux paramètres de sécurité et aux outils de maintenance.</p>
             <a href="{% url 'securite_maintenance' %}" class="btn btn-light">Voir plus</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Deuxième ligne de cartes -->
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card text-white bg-info mb-3">
+          <div class="card-body">
+            <h5 class="card-title">Personnalisation</h5>
+            <p class="card-text">Modifiez l’apparence et le style global de la plateforme.</p>
+            <a href="{% url 'personnalisation' %}" class="btn btn-light">Voir plus</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card text-white bg-secondary mb-3">
+          <div class="card-body">
+            <h5 class="card-title">Rapports Avancés</h5>
+            <p class="card-text">Visualisez des statistiques détaillées et exportez des rapports.</p>
+            <a href="{% url 'rapports_avances' %}" class="btn btn-light">Voir plus</a>
           </div>
         </div>
       </div>

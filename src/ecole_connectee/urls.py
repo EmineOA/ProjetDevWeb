@@ -1,10 +1,9 @@
 from django.urls import path, include
-from .views import index
 from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('',index, name="index"),
+    path('',include('src.information.urls')),
     path('admin/', include('src.administration.urls')),
     path('objets/', include('src.objets.urls')),
     path('accounts/', include('django.contrib.auth.urls')),

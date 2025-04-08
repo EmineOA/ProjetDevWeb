@@ -1,5 +1,5 @@
 # Exemple d'un décorateur role_required qui permet l'accès si le rôle de l'utilisateur
-# est "visualisation" ou supérieur dans la hiérarchie.
+# est "simple" ou supérieur dans la hiérarchie.
 from django.core.exceptions import PermissionDenied
 
 def role_required(required_role):
@@ -7,7 +7,7 @@ def role_required(required_role):
         def _wrapped_view(request, *args, **kwargs):
             # Supposons que vous avez une hiérarchie des rôles sous forme d'un dictionnaire
             role_hierarchy = {
-                'visualisation': 1,
+                'simple': 1,
                 'complexe': 2,
                 'administrateur': 3,
             }
